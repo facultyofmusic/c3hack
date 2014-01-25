@@ -34,7 +34,7 @@
  */
 int handle_command(int sock, char *cmd)
 {
-	logger(_SOURCE_SERVER, "Processing command '%s'\n", cmd); // replace LOG commands with logger() calls
+	logger(_SOURCE_SERVER, "Processing command '%s'", cmd); // replace LOG commands with logger() calls
 
 	// For now, just send back the command to the client.
 	sendall(sock, cmd, strlen(cmd));
@@ -71,7 +71,7 @@ int main(int argc, char *argv[])
 		printf("Error processing config file.\n");
 		exit(EXIT_FAILURE);
 	}
-	logger(_SOURCE_SERVER, "Server on %s:%d\n", params.server_host, params.server_port);
+	logger(_SOURCE_SERVER, "Server on %s:%d", params.server_host, params.server_port);
 
 	// Create a socket.
 	int listensock = socket(PF_INET, SOCK_STREAM, 0);
@@ -118,7 +118,7 @@ int main(int argc, char *argv[])
 			printf("Error accepting a connection.\n");
 			exit(EXIT_FAILURE);
 		}
-		logger(_SOURCE_SERVER, "Got a connection from %s:%d.\n", inet_ntoa(clientaddr.sin_addr), clientaddr.sin_port);
+		logger(_SOURCE_SERVER, "Got a connection from %s:%d.", inet_ntoa(clientaddr.sin_addr), clientaddr.sin_port);
 
 		// Get commands from client.
 		int wait_for_commands = 1;
@@ -139,7 +139,7 @@ int main(int argc, char *argv[])
 		
 		// Close the connection with the client.
 		close(clientsock);
-		logger(_SOURCE_SERVER, "Closed connection from %s:%d.\n", inet_ntoa(clientaddr.sin_addr), clientaddr.sin_port);
+		logger(_SOURCE_SERVER, "Closed connection from %s:%d.", inet_ntoa(clientaddr.sin_addr), clientaddr.sin_port);
 	}
 
 	// Stop listening for connections.

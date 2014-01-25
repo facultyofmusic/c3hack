@@ -20,7 +20,7 @@
 #define TABLE "marks"
 #define KEY "ece297"
 
-#define LOGGING 1
+#define LOGGING 2
 
 
 /**

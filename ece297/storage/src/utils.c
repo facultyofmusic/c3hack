@@ -15,7 +15,7 @@
 #include <unistd.h>
 #include <stdarg.h>
 #include "utils.h"
-//
+
 
  int sendall(const int sock, const char *buf, const size_t len)
  {
@@ -150,36 +150,57 @@
  FILE *clientLogFile, *serverLogFile;
 
 
-void logger(int source_id, const char* format, ... )
+ void logger(int source_id, const char* format, ... )
  {
 
-	va_list args;
-	va_start (args, format);
-	
+ 	va_list args;
+ 	va_start (args, format);
+
+
+ 	char stamp[80];
+	memset(stamp, 0, 80);
+
+ 	time_t rawtime;
+	struct tm *info;
+
+	time( &rawtime );
+	info = localtime( &rawtime );
+	strftime(stamp ,80,"%H:%M:%S", info);
+
  	if(source_id == _SOURCE_CLIENT || source_id == _SOURCE_STORAGE){
  		if(clientLoggingMode == C_LOG){
  			if(source_id == _SOURCE_CLIENT){
-				printf("[CLIENT] ");
-			}else{
-				printf("[STORAGE] ");
-			}
+ 				printf("[CLIENT] ");
+ 			}else{
+ 				printf("[STORAGE] ");
+ 			}
 
  			vprintf(format, args);
+ 			printf("\n");
  			
  			
  		}else if (clientLoggingMode == F_LOG){
+ 			if(source_id == _SOURCE_CLIENT){
+ 				fprintf(clientLogFile, "[CLIENT] ");
+ 			}else{
+ 				fprintf(clientLogFile, "[STORAGE] ");
+ 			}
  			vfprintf(clientLogFile, format, args);
+ 			fprintf(clientLogFile, "\n");
  			fflush(clientLogFile);
 
  		}
 
  	}else if (source_id == _SOURCE_SERVER){
  		if(serverLoggingMode == C_LOG){
-			printf("[SERVER] ");
+ 			printf("[SERVER %s] ", stamp);
  			vprintf(format, args);
+ 			printf("\n");
  			
  		}else if (serverLoggingMode == F_LOG){
+ 			fprintf(serverLogFile, "[SERVER %s] ", stamp);
  			vfprintf(serverLogFile, format, args);
+ 			fprintf(serverLogFile, "\n");
  			fflush(serverLogFile);
 
  		}
@@ -210,22 +231,15 @@ void logger(int source_id, const char* format, ... )
  	}else{
  		printf("[LOGGER] Initializing client log file...\n");
 
- 		time_t rawtime;
- 		struct tm *info;
- 		char buffer[80];
-
- 		time( &rawtime );
-
- 		info = localtime( &rawtime );
-
- 		strftime(buffer,80,"%F-%H-%M-%S", info);
-
  		char logName[80];
 
  		memset(logName, 0, 80);
 
+ 		char timestamp [80];
+ 		getTimeStamp(timestamp);
+
  		strcat(logName,"Client-");
- 		strcat(logName,buffer);
+ 		strcat(logName, timestamp);
  		char *str3=".log";
  		strcat(logName,str3);
 
@@ -259,42 +273,33 @@ void logger(int source_id, const char* format, ... )
 
 
 
-
-
-
-
  int serverInitLogger(int logging_mode){
 
  	serverLoggingMode = logging_mode;
  	serverLogFile = NULL;
 
  	if(logging_mode == N_LOG){
- 		printf("[LOGGER] server Logging Disabled\n");
+ 		printf("[LOGGER] Server Logging Disabled\n");
  	}else if (logging_mode == C_LOG){
- 		printf("[LOGGER] server logging to console\n");
+ 		printf("[LOGGER] Server logging to console\n");
  	}else{
  		printf("[LOGGER] Initializing server log file...\n");
-
- 		time_t rawtime;
- 		struct tm *info;
- 		char buffer[80];
-
- 		time( &rawtime );
-
- 		info = localtime( &rawtime );
-
- 		strftime(buffer,80,"%F-%H-%M-%S", info);
 
  		char logName[80];
 
  		memset(logName, 0, 80);
 
+ 		//printf("TIME STAMP: %s\n", getTimeStamp());
+
+ 		char timestamp [80];
+ 		getTimeStamp(timestamp);
+
  		strcat(logName,"Server-");
- 		strcat(logName,buffer);
+ 		strcat(logName,timestamp);
  		char *str3=".log";
  		strcat(logName,str3);
 
- 		printf("[LOGGER] server logging to file: %s\n", logName);
+ 		printf("[LOGGER] Server logging to file: %s\n", logName);
 
  		serverLogFile = NULL;
  		serverLogFile=fopen(logName,"w");
@@ -313,3 +318,17 @@ void logger(int source_id, const char* format, ... )
 
  	return 1;
  }
+
+ void getTimeStamp(char * stamp){
+	
+ 	memset(stamp, 0, 80);
+
+	time_t rawtime;
+	struct tm *info;
+
+	time( &rawtime );
+
+	info = localtime( &rawtime );
+
+	strftime(stamp ,80,"%F-%H-%M-%S", info);
+}

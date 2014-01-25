@@ -130,10 +130,6 @@
 #define F_LOG 2
 
 
-void logger(int source_id, const char* format, ... );
-
-
-
 int clientInitLogger(int logging_mode);
 
 int clientTerminateLogger();
@@ -146,6 +142,9 @@ int serverTerminateLogger();
 
 
 
+void logger(int source_id, const char* format, ... );
+
+void getTimeStamp();
 
 
 
