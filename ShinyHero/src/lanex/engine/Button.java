@@ -1,5 +1,6 @@
 package lanex.engine;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 
 public class Button {
@@ -29,6 +30,11 @@ public class Button {
 		if (ERM.getImage(img) != null)
 			ERM.getImage(img).draw(x, y);
 		else
+		{
+			g.setColor(Color.white);
+			g.fillRect(x, y, width, height);
+			g.setColor(Color.black);
 			g.drawString(img, x, y);
+		}
 	}
 }

@@ -3,6 +3,7 @@ package lanex.engine;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 
 public class ButtonList<T> {
@@ -41,7 +42,7 @@ public class ButtonList<T> {
 
 	public void addMember(T member, String memberName) {
 		members.add(member);
-		buttons.add(new Button(startX, startY + numMembers * 20, width, 20,
+		buttons.add(new Button(startX, startY + numMembers * 22, width, 20,
 				memberName));
 		numMembers++;
 	}
@@ -51,7 +52,8 @@ public class ButtonList<T> {
 			Button b;
 			(b = buttons.get(i)).render(g);
 			if (members.get(i) == (currentMember))
-				g.drawRect(b.x-1, b.y-1, b.width+1, b.height+1);
+				g.setColor(Color.red);
+				g.drawRect(b.x, b.y, b.width, b.height);
 		}
 	}
 
