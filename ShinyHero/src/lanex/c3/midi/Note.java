@@ -1,18 +1,18 @@
 package lanex.c3.midi;
 
 public class Note {
-	private final String[] NOTE_NAMES = {"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"};
+	private static final String[] NOTE_NAMES = {"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"};
 	
 	private long startTick;
 	private long stopTick;
-	private int key;
+	private int pitch;
 	private int octave;
 	
-	public Note(long startTick, int key, int velocity) {
+	public Note(long startTick, int pitch, int velocity) {
 		this.startTick = startTick;
-		this.key = key;
+		this.pitch = pitch;
 		
-		octave = (key / 12) - 1;
+		octave = (pitch / 12) - 1;
 	}
 	
 	public void noteOn(long tick) {
@@ -32,11 +32,11 @@ public class Note {
 	}
 	
 	public int getKey() {
-		return key;
+		return pitch;
 	}
 	
 	@Override
 	public String toString() {
-        return NOTE_NAMES[key % 12] + octave;
+        return NOTE_NAMES[pitch % 12] + octave;
 	}
 }

@@ -16,14 +16,18 @@ public class MusicMap {
 	public static final int NOTE_ON = 0x90;
 	public static final int NOTE_OFF = 0x80;
 	
-	private List<Track> channels;
+	private List<Track> trackList;
 	
 	private MusicMap() {
-		channels = new ArrayList<Track>();
+		trackList = new ArrayList<Track>();
+	}
+	
+	public List<Track> getTrackList() {
+		return trackList;
 	}
 	
 	public void addChannel(Track channel) {
-		channels.add(channel);
+		trackList.add(channel);
 	}
 	
 	public static MusicMap fromPath(String path) {
