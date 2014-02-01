@@ -1,7 +1,5 @@
 package lanex.c3;
 
-import java.util.ArrayList;
-
 import lanex.engine.Button;
 import lanex.engine.ERM;
 import lanex.engine.ScreenPage;
@@ -9,8 +7,6 @@ import lanex.engine.ScreenPage;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.SlickException;
-import org.newdawn.slick.gui.MouseOverArea;
 
 public class C3Help extends ScreenPage{
 	

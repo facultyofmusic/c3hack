@@ -4,7 +4,6 @@ package lanex.c3;
 import lanex.engine.ERM;
 import lanex.engine.ScreenPage;
 
-import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;

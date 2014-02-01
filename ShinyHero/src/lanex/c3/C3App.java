@@ -14,15 +14,20 @@ import org.newdawn.slick.gui.AbstractComponent;
 import org.newdawn.slick.gui.ComponentListener;
 
 public class C3App extends BasicGame implements ComponentListener {
-	public static int RENDER_WIDTH = 1280, RENDER_HEIGHT = 720;
 	public static AppGameContainer app;
 	public static ScreenPage currentPage;
 	public static C3SplashScreen splash;
+	
+	
 	private static float alpha = 1;
 	private static float musicVol = 1, sfxVol = 1;
+	public static int RENDER_WIDTH = 1280, RENDER_HEIGHT = 720;
+	
+	
 	public static HashMap<String, ScreenPage> pages;
 	public static GameContainer container;
-	// public static THConsole c;
+
+	
 	public static C3InternalConsole THC;
 	boolean showConsole = false;
 
@@ -31,10 +36,10 @@ public class C3App extends BasicGame implements ComponentListener {
 	}
 
 	@Override
-	public void init(GameContainer container) throws SlickException {
-		this.container = container;
+	public void init(GameContainer con) throws SlickException {
+		container = con;
 		
-		THC = C3InternalConsole.getInstance(container, this);
+		THC = C3InternalConsole.getInstance(con, this);
 		THC.append("initializing pages...");
 
 		C3SplashScreen.setRedirect("main_menu");

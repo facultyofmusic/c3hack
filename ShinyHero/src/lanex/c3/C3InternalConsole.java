@@ -52,11 +52,6 @@ public class C3InternalConsole implements ComponentListener{
 			new java.awt.Font("Courier New", java.awt.Font.PLAIN, 14), false);
 	
 	/**
-	 * The console's default transparent black color
-	 */
-	private Color color = new Color(0, 0, 0, 0.5f);
-	
-	/**
 	 * utility images
 	 */
 	private Image black, white;

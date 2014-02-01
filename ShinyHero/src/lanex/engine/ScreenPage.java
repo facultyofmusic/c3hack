@@ -4,8 +4,7 @@ import org.newdawn.slick.Graphics;
 
 
 public abstract class ScreenPage {
-	private ScreenPage instance;
-	
+
 	public abstract void render(GameContainer container, Graphics g);
 	
 	/**
