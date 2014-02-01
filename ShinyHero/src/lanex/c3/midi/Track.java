@@ -19,6 +19,10 @@ public class Track implements Iterable<Note> {
 		notes.removeLast();
 	}
 	
+	public LinkedList<Note> getNotes() {
+		return notes;
+	}
+	
 	public int getNotesSize() {
 		return notes.size();
 	}

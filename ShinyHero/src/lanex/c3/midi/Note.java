@@ -1,6 +1,6 @@
 package lanex.c3.midi;
 
-public class Note {
+public class Note implements Comparable<Note> {
 	private static final String[] NOTE_NAMES = {"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"};
 	
 	private long startTick;
@@ -31,12 +31,17 @@ public class Note {
 		return stopTick;
 	}
 	
-	public int getKey() {
+	public int getPitch() {
 		return pitch;
 	}
 	
 	@Override
+	public int compareTo(Note note) {
+		return pitch - note.getPitch();
+	}
+	
+	@Override
 	public String toString() {
-        return NOTE_NAMES[pitch % 12] + octave;
+        return NOTE_NAMES[pitch % 12] + octave + " [" + startTick + " " + stopTick + "] ";
 	}
 }

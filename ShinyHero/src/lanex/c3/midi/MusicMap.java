@@ -17,6 +17,7 @@ public class MusicMap {
 	public static final int NOTE_OFF = 0x80;
 	
 	private List<Track> trackList;
+	private double millisPerTick;
 	
 	private MusicMap() {
 		trackList = new ArrayList<Track>();
@@ -26,7 +27,11 @@ public class MusicMap {
 		return trackList;
 	}
 	
-	public void addChannel(Track channel) {
+	public double getMillisPerTick() {
+		return millisPerTick;
+	}
+	
+	private void addChannel(Track channel) {
 		trackList.add(channel);
 	}
 	
@@ -36,6 +41,9 @@ public class MusicMap {
 		try {
 			Sequence sequence = MidiSystem.getSequence(new File(path));
 			map = new MusicMap();
+			//TODO this only works if there is a single BPM for the whole song
+			map.millisPerTick = (double)sequence.getMicrosecondLength() / sequence.getTickLength() / 1000;
+			
 	        int trackNumber = 0;
 	        for (javax.sound.midi.Track track :  sequence.getTracks()) {
 	        	Track toAdd = generateTrackFromTrack(track, trackNumber);
@@ -57,7 +65,6 @@ public class MusicMap {
 	
 	private static Track generateTrackFromTrack(javax.sound.midi.Track track, int trackNumber) {
 		Track c3Track = new Track(trackNumber);
-//		Map<Integer, Note> playingNotes = new HashMap<Integer, Note>();
 		Note currentNote = null;
             
         for (int i=0; i < track.size(); i++) { 
@@ -68,31 +75,13 @@ public class MusicMap {
                 ShortMessage sm = (ShortMessage) message;
                 long startTick = event.getTick();
                 if (sm.getCommand() == NOTE_ON) {
-                    int key = sm.getData1();
+                    int pitch = sm.getData1();
                     int velocity = sm.getData2();
-                    Note note = new Note(startTick, key, velocity);
-                    if (currentNote != null) {
-                    	//if part of the same chord
-                    	if (currentNote.getStartTick() == note.getStartTick()) {
-                    		//if the current note is lower than the new note
-                    		if (currentNote.getKey() < note.getKey()) {
-                    			//System.err.println("Warning: chord not dealt with");
-                    			c3Track.removeLastNote();
-                    		}
-                    	} else {
-	                    	currentNote.noteOff(event.getTick());
-	                    	System.err.println("a note was started and cut off a previous one!");
-                    	}
-                    }
-                    currentNote = note;
-                    c3Track.addNote(currentNote);
+                    currentNote = noteOn(c3Track, currentNote, startTick, pitch, velocity);
                 } else if (sm.getCommand() == NOTE_OFF) {
-                    if (currentNote == null) {
-                    	System.err.println("a note was ended without starting!");
-                    } else {
-                    	currentNote.noteOff(startTick);
-                    	currentNote = null;
-                    }
+                    int pitch = sm.getData1();
+                    int velocity = sm.getData2();
+                    currentNote = noteOff(c3Track, currentNote, startTick, pitch, velocity);
                 }
             }
         }
@@ -101,9 +90,44 @@ public class MusicMap {
 		return c3Track;
 	}
 	
-	public Note getNextNote() {
+	private static Note noteOn(Track track, Note currentNote, long tick, int pitch, int velocity) {
+		Note pressedNote = new Note(tick, pitch, velocity);
+		if (currentNote != null) {
+			//if the two notes start at the same time (part of the same chord)
+			if (currentNote.getStartTick() == tick) {
+				//if the first parsed note has a lower pitch than the new note
+				if (currentNote.compareTo(pressedNote) < 0) {
+					//replace the first parsed note with the new note
+					currentNote = pressedNote;
+				}
+			} else { //otherwise, close the first note and add start the new note
+				currentNote.noteOff(tick);
+				track.addNote(currentNote);
+				currentNote = pressedNote;
+			}
+		}
+		return pressedNote;
+		
+	}
+	
+	private static Note noteOff(Track track, Note currentNote, long tick, int pitch, int velocity) {
+		if (currentNote != null) {
+			//if it is the same note being pressed as is being released
+			if (currentNote.getPitch() == pitch) {
+				//remove the note and add it to the notes list
+				currentNote.noteOff(tick);
+				track.addNote(currentNote);
+				//return null, since no note is being pressed anymore
+				return null;
+			} else {
+				//return currentNote, since we ignore the released note if it isn't the same
+				return currentNote;
+			}
+		}
+		//there should have been a note playing; ignore this noteOff call
 		return null;
 	}
+
 	
     public static void main(String[] args) throws Exception {
     	MusicMap.fromPath("data/music/for_elise_by_beethoven.mid");
