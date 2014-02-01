@@ -19,19 +19,29 @@ import org.newdawn.slick.SlickException;
 import ui.AudioInputProcessor;
 
 public class C3Game extends ScreenPage {
-	private Button menu_button;
+	private Button menu_button, start_button;
 
 	static float currentPitch;
 	static float[] history = new float[C3App.RENDER_WIDTH],
 			pitchHistory = new float[C3App.RENDER_WIDTH];
 	
+	boolean playing;
+	
 	MusicMap testMap;
+	
+	long startTime, currentTime;
+	int currentTick;
+	
 
 	public C3Game() {
-		menu_button = new Button(C3App.RENDER_WIDTH / 2 + 200, 600, 500, 100,
+		menu_button = new Button(C3App.RENDER_WIDTH / 2 + 400, 600, 500, 100,
 				"menu_button.png");
+		start_button = new Button(C3App.RENDER_WIDTH / 2, 600, 500, 100,
+				"start_button.png");
 		
 		testMap = MusicMap.fromPath("data/music/for_elise_by_beethoven.mid");
+		
+		playing = false;
 	}
 
 	@Override
@@ -42,13 +52,10 @@ public class C3Game extends ScreenPage {
 		String[] notes = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#",
 				"A", "A#", "B" };
 
-		currentPitch = (float) (69D + (12D * Math
-				.log((float) AudioInputProcessor.frequency / 440D))
-				/ Math.log(2D));
-
 		String note = (currentPitch > 0) ? notes[((int) (currentPitch + 0.5) % 12)]
 				: "NaN";
 
+		// debug headphones
 		g.setColor(Color.white);
 
 		g.drawString((new StringBuilder("Note: ")).append(note).toString(), 20,
@@ -58,7 +65,11 @@ public class C3Game extends ScreenPage {
 						AudioInputProcessor.frequency).toString(), 20, 40);
 		g.drawString((new StringBuilder("Pitch No.: ")).append(currentPitch)
 				.toString(), 20, 60);
+		g.drawString("Milliseconds Delta: " + (currentTime - startTime), 20, 80);
+		g.drawString("Current Tick: " + currentTick, 20, 100);
 
+		
+		// draw history
 		for (int x = 0; x < C3App.RENDER_WIDTH; x++) {
 			g.setColor(Color.gray);
 			g.fillRect(C3App.RENDER_WIDTH / 2 - x, C3App.RENDER_HEIGHT + 279
@@ -77,18 +88,38 @@ public class C3Game extends ScreenPage {
 		//
 		// GUI
 		menu_button.render(g);
+		start_button.render(g);
 		//
 
 		update();
 	}
 
 	public void update() {
+		
+		if(playing){
+			currentTime = System.currentTimeMillis();
+			currentTick = (int) ((1.0f * currentTime - startTime)/1);
+
+
+			currentPitch = (float) (69D + (12D * Math
+					.log((float) AudioInputProcessor.frequency / 440D))
+					/ Math.log(2D));
+		}
+		
+		
 		for (int x = C3App.RENDER_WIDTH - 1; x > 0; x--) {
 			history[x] = history[x - 1];
 			pitchHistory[x] = pitchHistory[x - 1];
 		}
 		pitchHistory[0] = currentPitch;
 		history[0] = (int) (currentPitch + 0.5);
+	}
+	
+	void start(){
+		startTime = System.currentTimeMillis();
+		currentTick = 0;
+		
+		playing = true;
 	}
 
 	@Override
@@ -122,6 +153,8 @@ public class C3Game extends ScreenPage {
 				C3App.splash.reset();
 				C3SplashScreen.setRedirect("main_menu");		
 				C3App.setPage("splash");
+			} else if (start_button.ifOnButton(x, y)) {
+				start();
 			}
 		}
 	}
