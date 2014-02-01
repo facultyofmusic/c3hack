@@ -15,6 +15,8 @@ public class C3SplashScreen extends ScreenPage{
 	private Image black;
 	static String REDIRECT = null;
 	
+	float fadeTime = 0.1f;
+	
 	public static void setRedirect(String s){
 		REDIRECT = s;
 		ERM.set("data/" + REDIRECT + ".rlist");
@@ -43,13 +45,13 @@ public class C3SplashScreen extends ScreenPage{
 		g.clear();
 		backgroundImage.draw(0, 0);
 		if (backgroundImage.getAlpha() < 1.0){
-			backgroundImage.setAlpha(backgroundImage.getAlpha() + 0.11f);
+			backgroundImage.setAlpha(backgroundImage.getAlpha() + fadeTime);
 		}else{			
 			C3LoadingIndicator.draw(g);
 
 			C3LoadingIndicator.draw(g);
 			if (ERM.isDoneLoading()) {
-				black.setAlpha(black.getAlpha() + 0.02f);
+				black.setAlpha(black.getAlpha() + fadeTime);
 
 				if (black.getAlpha() >= 1) {
 					C3App.setPage(REDIRECT);

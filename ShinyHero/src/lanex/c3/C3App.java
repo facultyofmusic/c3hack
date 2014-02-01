@@ -13,6 +13,9 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.gui.AbstractComponent;
 import org.newdawn.slick.gui.ComponentListener;
 
+import ui.AudioInputProcessor;
+
+
 public class C3App extends BasicGame implements ComponentListener {
 	public static AppGameContainer app;
 	public static ScreenPage currentPage;
@@ -42,7 +45,7 @@ public class C3App extends BasicGame implements ComponentListener {
 		THC = C3InternalConsole.getInstance(con, this);
 		THC.append("initializing pages...");
 
-		C3SplashScreen.setRedirect("main_menu");
+		C3SplashScreen.setRedirect("game");
 		
 		pages = new HashMap<String, ScreenPage>();
 
@@ -140,6 +143,9 @@ public class C3App extends BasicGame implements ComponentListener {
 	}
 
 	public static void main(String args[]) {
+
+		AudioInputProcessor aiprocessor = new AudioInputProcessor();
+		(new Thread(aiprocessor)).start();
 
 		try {
 			app = new AppGameContainer(new C3App(

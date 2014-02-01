@@ -15,9 +15,9 @@ public class C3Menu extends ScreenPage {
 	public static Music music;
 
 	public C3Menu() {
-		help_button = new Button(C3App.RENDER_WIDTH / 2 - 200, 600, 400, 100,		"help_button.png");
-		exit_button = new Button(C3App.RENDER_WIDTH / 2  + 200, 600, 500,				100, "highscore_button.png");
-		start_button = new Button(C3App.RENDER_WIDTH / 2 - 600, 600, 400, 100,				"start_button.png");
+		help_button = new Button(C3App.RENDER_WIDTH / 2 - 200, 600, 400, 100, "help_button.png");
+		exit_button = new Button(C3App.RENDER_WIDTH / 2  + 200, 600, 500, 100, "highscore_button.png");
+		start_button = new Button(C3App.RENDER_WIDTH / 2 - 600, 600, 400, 100, "start_button.png");
 	}
 
 	@Override
