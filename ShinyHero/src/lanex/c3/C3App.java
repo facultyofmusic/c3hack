@@ -1,37 +1,32 @@
-package lanex.one;
+package lanex.c3;
 
 import java.util.HashMap;
-import java.util.concurrent.ArrayBlockingQueue;
+
+import lanex.engine.ScreenPage;
 
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.Color;
-import org.newdawn.slick.Game;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Music;
-import org.newdawn.slick.ScalableGame;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.gui.AbstractComponent;
 import org.newdawn.slick.gui.ComponentListener;
-import org.newdawn.slick.gui.TextField;
 
-public class OneApp extends BasicGame implements ComponentListener {
-	public static int CLIP_X, CLIP_Y, CLIP_WIDTH, CLIP_HEIGHT,
-			RENDER_WIDTH = 1280, RENDER_HEIGHT = 720;
+public class C3App extends BasicGame implements ComponentListener {
+	public static int RENDER_WIDTH = 1280, RENDER_HEIGHT = 720;
 	public static AppGameContainer app;
 	public static ScreenPage currentPage;
-	public static OneSplash splash;
+	public static C3SplashScreen splash;
 	private static float alpha = 1;
 	private static float musicVol = 1, sfxVol = 1;
 	public static HashMap<String, ScreenPage> pages;
 	public static GameContainer container;
 	// public static THConsole c;
-	public static OneInternalConsole THC;
+	public static C3InternalConsole THC;
 	boolean showConsole = false;
 
-	public OneApp(String title) {
+	public C3App(String title) {
 		super(title);
 	}
 
@@ -39,33 +34,21 @@ public class OneApp extends BasicGame implements ComponentListener {
 	public void init(GameContainer container) throws SlickException {
 		this.container = container;
 		
-		THC = OneInternalConsole.getInstance(container, this);
+		THC = C3InternalConsole.getInstance(container, this);
 		THC.append("initializing pages...");
 
-		OneSplash.setRedirect("main_menu");
-		//
-		//
-		//
-		//
-		// TEMP!
-		OneGame.initNew();
-		//
-		//
-		//
-		//
-		//
-
+		C3SplashScreen.setRedirect("main_menu");
+		
 		pages = new HashMap<String, ScreenPage>();
 
-		splash = new OneSplash();
+		splash = new C3SplashScreen();
 
 		pages.put("splash", splash);
-		pages.put("game", new OneGame());
-		pages.put("main_menu", new OneMenu());
-		pages.put("help", new OneHelp());
-		pages.put("highscore", new OneHighscore());
-		pages.put("custom", new OneCustomization());
-		pages.put("gameover", new OneGameover());
+		pages.put("game", new C3Game());
+		pages.put("main_menu", new C3Menu());
+		pages.put("help", new C3Help());
+		pages.put("custom", new C3Customization());
+		pages.put("gameover", new C3Gameover());
 
 		setPage("splash");
 
@@ -97,7 +80,7 @@ public class OneApp extends BasicGame implements ComponentListener {
 			g.setColor(new Color(0, 0, 0, alpha -= 0.125));
 			// System.out.println("SCREEN WIDTH: " + OneApp.app.getWidth() +
 			// ", SCREEN HEIGHT" + OneApp.app.getHeight());
-			g.fillRect(0, 0, OneApp.RENDER_WIDTH, OneApp.RENDER_HEIGHT);
+			g.fillRect(0, 0, C3App.RENDER_WIDTH, C3App.RENDER_HEIGHT);
 		}
 
 		if (showConsole)
@@ -151,21 +134,13 @@ public class OneApp extends BasicGame implements ComponentListener {
 		currentPage.mouseReleased(button, x, y);
 	}
 
-	public static void NOT_main(String args[]) {
+	public static void main(String args[]) {
 
 		try {
-			app = new AppGameContainer(new OneApp(
-					"Touhou Project Doujin 12.1"), 1280, 720,
+			app = new AppGameContainer(new C3App(
+					"c3 hack"), 1280, 720,
 					false);
-
-			// app.setDisplayMode(1280, 720, true);
-			// app.setDisplayMode(960, 720, false);
-			// app.setDisplayMode(1024, 768, false);
-
-			CLIP_X = (int) (app.getWidth() * 0.046875);
-			CLIP_Y = (int) (app.getHeight() * 0.03125);
-			CLIP_WIDTH = (int) (app.getWidth() * 0.6015625);
-			CLIP_HEIGHT = (int) (app.getHeight() * 0.9375);
+			
 			app.setShowFPS(false);
 			app.setAlwaysRender(false);
 			app.setUpdateOnlyWhenVisible(true);
