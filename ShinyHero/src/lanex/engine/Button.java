@@ -26,6 +26,9 @@ public class Button {
 	}
 
 	public void render(Graphics g) {
-		ERM.getImage(img).draw(x, y);
+		if (ERM.getImage(img) != null)
+			ERM.getImage(img).draw(x, y);
+		else
+			g.drawString(img, x, y);
 	}
 }

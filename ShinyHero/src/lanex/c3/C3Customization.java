@@ -21,6 +21,8 @@ public class C3Customization extends ScreenPage{
 	public C3Customization(){
 		hell_button = new Button(C3App.RENDER_WIDTH/2 + 200,  550, 400, 100, "start_button.png");
 		menu_button = new Button(C3App.RENDER_WIDTH/2 - 600,  550, 400, 100, "menu_button.png");
+		
+		
 	}
 
 	@Override
