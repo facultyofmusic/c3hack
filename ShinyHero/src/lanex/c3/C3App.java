@@ -13,7 +13,6 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.gui.AbstractComponent;
 import org.newdawn.slick.gui.ComponentListener;
 
-import ui.AudioInputProcessor;
 
 public class C3App extends BasicGame implements ComponentListener {
 	public static AppGameContainer app;
@@ -143,9 +142,6 @@ public class C3App extends BasicGame implements ComponentListener {
 
 	public static void main(String args[]) {
 
-		// start audio input processor
-		AudioInputProcessor aiprocessor = new AudioInputProcessor();
-		(new Thread(aiprocessor)).start();
 
 		try {
 			app = new AppGameContainer(new C3App(
