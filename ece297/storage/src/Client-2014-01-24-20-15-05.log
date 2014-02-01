@@ -1,5 +1,0 @@
-[STORAGE] Attempting to connect to localhost:1111
-[STORAGE] Connection established successfully.
-[STORAGE] Authenticating user: 
-[STORAGE] SELECT FROM TABLE marks WHERE (KEY == ece297)
-[STORAGE] Disconnecting...

@@ -1,5 +1,0 @@
-[SERVER 20:14:59] Server on localhost:1111
-[SERVER 20:15:10] Got a connection from 127.0.0.1:61134.
-[SERVER 20:15:18] Processing command 'AUTH daneil xx.KWBkwUKDf2'
-[SERVER 20:15:26] Processing command 'GET marks ece297'
-[SERVER 20:15:28] Closed connection from 127.0.0.1:61134.
