@@ -13,8 +13,6 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.gui.AbstractComponent;
 import org.newdawn.slick.gui.ComponentListener;
 
-import ui.AudioInputProcessor;
-
 
 public class C3App extends BasicGame implements ComponentListener {
 	public static AppGameContainer app;
