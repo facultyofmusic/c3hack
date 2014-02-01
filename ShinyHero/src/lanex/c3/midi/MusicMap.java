@@ -16,11 +16,14 @@ public class MusicMap {
 	public static final int NOTE_ON = 0x90;
 	public static final int NOTE_OFF = 0x80;
 	
+	private String filePath;
+	
 	private List<Track> trackList;
 	private double millisPerTick;
 	
 	private MusicMap() {
 		trackList = new ArrayList<Track>();
+		filePath = "";
 	}
 	
 	public List<Track> getTrackList() {
@@ -35,12 +38,18 @@ public class MusicMap {
 		trackList.add(channel);
 	}
 	
+	public String getPath()
+	{
+		return filePath;
+	}
+	
 	public static MusicMap fromPath(String path) {
 		MusicMap map = null;
 		
 		try {
 			Sequence sequence = MidiSystem.getSequence(new File(path));
 			map = new MusicMap();
+			map.filePath = path;
 			//TODO this only works if there is a single BPM for the whole song
 			map.millisPerTick = (double)sequence.getMicrosecondLength() / sequence.getTickLength() / 1000;
 			
@@ -58,8 +67,8 @@ public class MusicMap {
 			e.printStackTrace();
 		} catch (InvalidMidiDataException e) {
 			e.printStackTrace();
-		} 
-        
+		}		
+		
         return map;
 	}
 	
