@@ -1,1 +1,1 @@
-data/large_mob.png;data/room.png;data/medium_mob.png;data/small_mob.png;data/character.png;data/door.png;data/stairs.png;data/red_circle.png;data/weapon.png;data/potion.png;data/armor.png;data/boots.png;data/gameover_back.png;data/menu_button.png;data/se/hit.se.ogg;data/se/button.se.ogg;data/se/death.se.ogg;data/se/door.se.ogg;data/se/item.se.ogg;data/se/monster_death.se.ogg;data/small_room.png;data/small_red_room.png
+data/se/button.se.ogg;data/menu_button.png;

@@ -6,6 +6,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import lanex.c3.midi.MusicMap;
+import lanex.engine.Button;
 import lanex.engine.ScreenPage;
 
 import org.newdawn.slick.Color;
@@ -17,16 +19,21 @@ import org.newdawn.slick.SlickException;
 import ui.AudioInputProcessor;
 
 public class C3Game extends ScreenPage {
+	private Button menu_button;
 
 	static float currentPitch;
 	static float[] history = new float[C3App.RENDER_WIDTH],
 			pitchHistory = new float[C3App.RENDER_WIDTH];
+	
+	MusicMap testMap;
 
 	public C3Game() {
+		menu_button = new Button(C3App.RENDER_WIDTH / 2 + 200, 600, 500, 100,
+				"menu_button.png");
 		
+		testMap = MusicMap.fromPath("data/music/for_elise_by_beethoven.mid");
 	}
 
-	
 	@Override
 	public void render(GameContainer arg0, Graphics g) {
 		g.setColor(Color.white);
@@ -35,11 +42,9 @@ public class C3Game extends ScreenPage {
 		String[] notes = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#",
 				"A", "A#", "B" };
 
-		double temp = 69D
-				+ (12D * Math
-						.log((float) AudioInputProcessor.frequency / 440D))
-				/ Math.log(2D);
-		currentPitch = (float) temp;
+		currentPitch = (float) (69D + (12D * Math
+				.log((float) AudioInputProcessor.frequency / 440D))
+				/ Math.log(2D));
 
 		String note = (currentPitch > 0) ? notes[((int) (currentPitch + 0.5) % 12)]
 				: "NaN";
@@ -54,21 +59,28 @@ public class C3Game extends ScreenPage {
 		g.drawString((new StringBuilder("Pitch No.: ")).append(currentPitch)
 				.toString(), 20, 60);
 
-		// g.drawLine(0, (currentPitch * 5), 20, (currentPitch * 5));
-
-		// g.setLineWidth(4);
-
 		for (int x = 0; x < C3App.RENDER_WIDTH; x++) {
-			g.setColor(Color.white);
-			g.fillRect(C3App.RENDER_WIDTH - x, C3App.RENDER_HEIGHT + 279 - (history[x] * 8), 1, 10);
+			g.setColor(Color.gray);
+			g.fillRect(C3App.RENDER_WIDTH / 2 - x, C3App.RENDER_HEIGHT + 279
+					- (history[x] * 8), 1, 10);
 			g.setLineWidth(2);
 			g.setColor(Color.red);
-			g.fillRect(C3App.RENDER_WIDTH - x, C3App.RENDER_HEIGHT + 283 - (pitchHistory[x] * 8), 1, 2);
+			g.fillRect(C3App.RENDER_WIDTH / 2 - x, C3App.RENDER_HEIGHT + 283
+					- (pitchHistory[x] * 8), 1, 2);
 		}
+
+		g.setColor(Color.gray);
+		g.drawLine(C3App.RENDER_WIDTH / 2, 0, C3App.RENDER_WIDTH / 2,
+				C3App.RENDER_HEIGHT);
+
+		//
+		//
+		// GUI
+		menu_button.render(g);
+		//
 
 		update();
 	}
-
 
 	public void update() {
 		for (int x = C3App.RENDER_WIDTH - 1; x > 0; x--) {
@@ -99,17 +111,24 @@ public class C3Game extends ScreenPage {
 
 	@Override
 	public void mouseDragged(int oldx, int oldy, int newx, int newy) {
-		
+
 	}
 
 	@Override
 	public void mousePressed(int button, int x, int y) {
-		
+		// CHECK BUTTONS
+		{
+			if (menu_button.ifOnButton(x, y)) {
+				C3App.splash.reset();
+				C3SplashScreen.setRedirect("main_menu");		
+				C3App.setPage("splash");
+			}
+		}
 	}
 
 	@Override
 	public void mouseReleased(int button, int x, int y) {
-		
+
 	}
 
 }
