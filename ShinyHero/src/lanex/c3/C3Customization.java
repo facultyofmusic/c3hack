@@ -1,6 +1,9 @@
 package lanex.c3;
 
+import java.io.File;
+
 import lanex.engine.Button;
+import lanex.engine.ButtonList;
 import lanex.engine.ERM;
 import lanex.engine.ScreenPage;
 
@@ -10,9 +13,13 @@ import org.newdawn.slick.Graphics;
 public class C3Customization extends ScreenPage{
 	
 	private Button hell_button, menu_button;
+	private ButtonList songList, trackList;
+	
+	private File currentSong;
+	private Object currentTrack;
 	
 	public C3Customization(){
-		hell_button = new Button(C3App.RENDER_WIDTH/2 - 200,  550, 400, 100, "start_button.png");
+		hell_button = new Button(C3App.RENDER_WIDTH/2 + 200,  550, 400, 100, "start_button.png");
 		menu_button = new Button(C3App.RENDER_WIDTH/2 - 600,  550, 400, 100, "menu_button.png");
 	}
 
