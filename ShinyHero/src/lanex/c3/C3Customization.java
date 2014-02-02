@@ -122,8 +122,6 @@ public class C3Customization extends ScreenPage {
 				C3Game.scrollSheet = new ScrollingMusicSheet(
 						channelList.getSelected());
 				C3Gameover.lastChannel = channelList.getSelected();
-				C3Gameover.indivScores.clear();
-				C3Gameover.maxScore = C3Gameover.lastChannel.getNotes().size()*300;
 				
 				System.out.println("SETTING: "
 						+ C3Game.scrollSheet.sourceChannel.getNotes());
