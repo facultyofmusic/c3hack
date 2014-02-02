@@ -5,6 +5,7 @@ import java.io.FilenameFilter;
 import java.util.List;
 
 import lanex.c3.midi.MusicMap;
+import lanex.c3.midi.MusicPlayer;
 import lanex.c3.midi.Track;
 import lanex.engine.Button;
 import lanex.engine.ButtonList;
@@ -42,7 +43,7 @@ public class C3Customization extends ScreenPage {
 			trackList = new ButtonList<>(C3App.RENDER_WIDTH/2 + 5,10,C3App.RENDER_WIDTH/2-15); //Temporary to save declaration space. Is nulled later.
 			for (Track t : temp)
 				trackList.addMember(t, t.toString());
-			songList.addMember(trackList, f.getName());
+			songList.addMember(trackList, f.getPath());
 		}
 		trackList = null;
 	}
@@ -102,6 +103,13 @@ public class C3Customization extends ScreenPage {
 			if (trackList != null)
 				trackList.checkButtons(x, y);
 			if (hell_button.ifOnButton(x, y)) {
+				
+				C3Game.testMap = MusicMap.fromPath(songList.getSelectedName());
+				C3Game.musicPlayer = new MusicPlayer();
+				C3Game.musicPlayer.play(C3Game.testMap);
+				C3Game.scrollSheet = new ScrollingMusicSheet(trackList.getSelected());
+				System.out.println("SETTING: " + C3Game.scrollSheet.sourceTrack.getNotes());
+				
 				C3App.splash.reset();
 				C3SplashScreen.setRedirect("game");
 				C3App.setPage("splash");

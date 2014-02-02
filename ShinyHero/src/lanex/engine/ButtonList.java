@@ -15,6 +15,7 @@ public class ButtonList<T> {
 	private List<T> members;
 
 	private T currentMember;
+	private String currentName;
 
 	public ButtonList(float x, float y, float width) {
 		this.startX = x;
@@ -26,16 +27,22 @@ public class ButtonList<T> {
 		buttons = new ArrayList<>();
 		members = new ArrayList<>();
 		currentMember = null;
+		currentName = null;
 	}
 
 	public T getSelected() {
 		return currentMember;
 	}
-
+	
+	public String getSelectedName() {
+		return currentName;
+	}
+	
 	public void checkButtons(float mx, float my) {
 		for (int i = 0; i < numMembers; i++) {
 			if (buttons.get(i).ifOnButton(mx, my)) {
 				currentMember = members.get(i);
+				currentName = buttons.get(i).img;
 			}
 		}
 	}
