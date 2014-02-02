@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.Locale;
 
 import javax.sound.midi.*;
-import javax.swing.JOptionPane;
 
 public class MusicPlayer {
 	
@@ -65,13 +64,14 @@ public class MusicPlayer {
 		mp.play(map);
 		try
 		{
-			Thread.sleep(10000);
+			Thread.sleep(5000);
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
 		}
 		mp.stop();
+		
 		
 	}
 	

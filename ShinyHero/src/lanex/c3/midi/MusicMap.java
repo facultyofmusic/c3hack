@@ -1,11 +1,10 @@
 package lanex.c3.midi;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.sound.midi.InvalidMidiDataException;
+import javax.sound.midi.MetaMessage;
 import javax.sound.midi.MidiEvent;
 import javax.sound.midi.MidiMessage;
 import javax.sound.midi.MidiSystem;
@@ -74,14 +73,14 @@ public class MusicMap {
 	        	}
 	        	trackNumber++;
 	        }
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (InvalidMidiDataException e) {
+	        
+	        
+		} catch (Exception e) {
 			e.printStackTrace();
 		} catch (MidiUnavailableException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}		
+		}
 		
         return map;
 	}
@@ -113,8 +112,22 @@ public class MusicMap {
                 	System.out.println("Instrument: " + sm.getData1());
                 }
             }
+            else if (message instanceof MetaMessage)
+            {
+            	MetaMessage mm = (MetaMessage) message;
+            	if (mm.getType() == 4)
+            	{
+            		
+            		System.out.print("Instrument is: ");
+            		byte [] tempArr = mm.getData();
+            		char [] charArr = new char[tempArr.length];
+            		for (int j = 0; j < charArr.length; j++)
+            			charArr[j] = (char)tempArr[j];
+            		System.out.println(charArr);
+            	}
+            		
+            }
         }
-        System.out.println("Generated track: " + trackNumber);
         
 		return c3Track;
 	}
