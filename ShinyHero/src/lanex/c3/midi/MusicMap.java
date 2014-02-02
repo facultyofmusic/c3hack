@@ -6,14 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.sound.midi.InvalidMidiDataException;
-import javax.sound.midi.MetaMessage;
 import javax.sound.midi.MidiEvent;
 import javax.sound.midi.MidiMessage;
 import javax.sound.midi.MidiSystem;
-import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Sequence;
 import javax.sound.midi.ShortMessage;
-import javax.sound.midi.Synthesizer;
 
 public class MusicMap {
 	public static final int NOTE_ON = 0x90;
@@ -24,7 +21,7 @@ public class MusicMap {
 	public static final int NOTE_ON_F = 0x9F;
 	public static final int NOTE_OFF_0 = 0x80;
 	public static final int NOTE_OFF_F = 0x8F;
-	public static final int INSTRUMENT = 255;
+	public static final int INSTRUMENT = 0xC0;
 	
 	private String filePath;
 	
@@ -44,8 +41,8 @@ public class MusicMap {
 		return millisPerTick;
 	}
 	
-	private void addChannel(Track channel) {
-		trackList.add(channel);
+	private void addTrack(Track track) {
+		trackList.add(track);
 	}
 	
 	public String getPath()
@@ -55,10 +52,8 @@ public class MusicMap {
 	
 	public static MusicMap fromPath(String path) {
 		MusicMap map = null;
-		final String[] NOTE_NAMES = {"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"};
 		try {
 			Sequence sequence = MidiSystem.getSequence(new File(path));
-			Synthesizer synth = MidiSystem.getSynthesizer();
 			map = new MusicMap();
 			map.filePath = path;
 			//TODO this only works if there is a single BPM for the whole song
@@ -70,15 +65,14 @@ public class MusicMap {
 	       	System.out.println("Number of patches: " + sequence.getPatchList().length);
 	        for (javax.sound.midi.Track track :  sequence.getTracks()) {
 	        	Track toAdd = generateTrackFromTrack(track, trackNumber);
+	        	toAdd.clearEmptyChannels();
 	        	if (toAdd.hasNotes()) {
-	        		map.addChannel(toAdd);
+	        		map.addTrack(toAdd);
+	        		System.out.println(toAdd);
 	        	}
 	        	trackNumber++;
 	        }
 		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (MidiUnavailableException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InvalidMidiDataException e) {
 			// TODO Auto-generated catch block
@@ -95,9 +89,11 @@ public class MusicMap {
         for (int i=0; i < track.size(); i++) { 
             MidiEvent event = track.get(i);
             MidiMessage message = event.getMessage();
-
+            int messageCommand = message.getMessage()[0] + 256;
+         //   System.out.println(messageCommand);
             if (message instanceof ShortMessage) {
                 ShortMessage sm = (ShortMessage) message;
+                //System.out.println(sm.getCommand());
                 long startTick = event.getTick();
                 if (sm.getCommand() == NOTE_ON) {
                     int pitch = sm.getData1();
@@ -105,30 +101,19 @@ public class MusicMap {
                     int channel = sm.getChannel();
                     currentChannelNote[channel] = noteOn(
                     		c3Track, channel, currentChannelNote[channel], startTick, pitch, velocity);
-                } else if (sm.getCommand() >= NOTE_OFF) {
+                } else if (sm.getCommand() == NOTE_OFF) {
                     int pitch = sm.getData1();
                     int velocity = sm.getData2();
                     int channel = sm.getChannel();
                     currentChannelNote[channel] = noteOff(
                     		c3Track, channel, currentChannelNote[channel], startTick, pitch, velocity);
                 } else if (sm.getCommand() == INSTRUMENT) {
-                	System.out.println("Instrument: " + sm.getData1());
+                	int instrumentCode = sm.getData1();
+                	int channel = sm.getChannel();
+                	c3Track.addInstrumentToChannel(channel, instrumentCode);
                 }
-            }
-            else if (message instanceof MetaMessage)
-            {
-            	MetaMessage mm = (MetaMessage) message;
-            	if (mm.getType() == 4)
-            	{
-            		
-            		System.out.print("Instrument is: ");
-            		byte [] tempArr = mm.getData();
-            		char [] charArr = new char[tempArr.length];
-            		for (int j = 0; j < charArr.length; j++)
-            			charArr[j] = (char)tempArr[j];
-            		System.out.println(charArr);
-            	}
-            		
+            } else if (messageCommand >= INSTRUMENT && messageCommand <= INSTRUMENT + 15) {
+            	System.out.println(message);
             }
         }
         
@@ -176,7 +161,7 @@ public class MusicMap {
 	
     public static void main(String[] args) throws Exception {
     	MusicMap.fromPath("mid/test_th.midi");
-    	//MusicMap.fromPath("mid/th08_10.mid");
-    	//MusicMap.fromPath("mid/k-on-fuwa-fuwa-time.mid");
+    	MusicMap.fromPath("mid/th08_10.mid");
+    	MusicMap.fromPath("mid/k-on-fuwa-fuwa-time.mid");
     }
 }
