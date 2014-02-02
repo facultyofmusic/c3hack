@@ -1,10 +1,5 @@
 package lanex.c3;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Iterator;
 
 import lanex.c3.midi.MusicMap;
@@ -17,8 +12,6 @@ import lanex.engine.ScreenPage;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Input;
-import org.newdawn.slick.SlickException;
 
 import ui.AudioInputProcessor;
 
@@ -162,12 +155,8 @@ public class C3Game extends ScreenPage {
 	}
 
 	void start() {
-		System.out.println(scrollSheet.sourceChannel.getNotes());
-		
 		musicPlayer.play(C3Game.testMap);
-		// currentTick = -scrollSheet.getOffscreenTickDelta();
 		currentTick = 0;
-
 		playing = true;
 	}
 
@@ -200,24 +189,7 @@ public class C3Game extends ScreenPage {
 		// CHECK BUTTONS
 		{
 			if (menu_button.ifOnButton(x, y)) {
-
-				// static float currentPitch;
-				// static float[] history = new float[C3App.RENDER_WIDTH],
-				// pitchHistory = new float[C3App.RENDER_WIDTH];
-				//
-				// boolean playing;
-				//
-				// public static MusicMap testMap;
-				// public static MusicPlayer musicPlayer;
-				// public static ScrollingMusicSheet scrollSheet;
-				//
-				// long startTime, deltaTime;
-				// int currentTick;
-				// float pixelsPerTick = 2;
-
-				// public static MusicMap testMap;
-				// public static MusicPlayer musicPlayer;
-				// public static ScrollingMusicSheet scrollSheet;
+				// go back to menu
 				if (musicPlayer.getSequencer() != null)
 					musicPlayer.stop();
 				playing = false;
@@ -227,7 +199,9 @@ public class C3Game extends ScreenPage {
 				C3App.splash.reset();
 				C3SplashScreen.setRedirect("main_menu");
 				C3App.setPage("splash");
+				
 			} else if (start_button.ifOnButton(x, y)) {
+				// start the music
 				if (!paused && !playing)
 					start();
 				else if (paused && playing) {
@@ -235,6 +209,7 @@ public class C3Game extends ScreenPage {
 					musicPlayer.resume();
 				}
 			} else if (pause_button.ifOnButton(x, y)) {
+				// stop the music
 				musicPlayer.stop();
 				paused = true;
 			}
