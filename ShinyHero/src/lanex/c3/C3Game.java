@@ -5,9 +5,11 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import lanex.c3.midi.MusicMap;
 import lanex.c3.midi.MusicPlayer;
+import lanex.c3.midi.Note;
 import lanex.engine.Button;
 import lanex.engine.ScreenPage;
 
@@ -34,6 +36,7 @@ public class C3Game extends ScreenPage {
 	
 	long startTime, deltaTime;
 	int currentTick;
+	float pixelsPerTick = 2;
 	
 
 	public C3Game() {
@@ -70,6 +73,10 @@ public class C3Game extends ScreenPage {
 				.toString(), 20, 60);
 		g.drawString("Milliseconds Delta: " + deltaTime, 20, 80);
 		g.drawString("Current Tick: " + currentTick, 20, 100);
+		g.drawString("Current Note: " + scrollSheet.currentActiveNote, 20, 120);
+		g.drawString("Active Note Count: " + scrollSheet.activeNotes.size(), 20, 140);
+		g.drawString("Offscreen Delta: " + scrollSheet.getOffscreenTickDelta(), 20, 160);
+		
 
 		
 		// draw history
@@ -93,6 +100,16 @@ public class C3Game extends ScreenPage {
 		menu_button.render(g);
 		start_button.render(g);
 		//
+		
+		Iterator<Note> activeListIterator = scrollSheet.activeNotes.iterator();
+		
+		while(activeListIterator.hasNext()){
+			Note temp = activeListIterator.next();
+			
+			g.drawRect(C3App.RENDER_WIDTH / 2 - (currentTick-temp.getStartTick()) * scrollSheet.pixelsPerTick, C3App.RENDER_HEIGHT + 283
+					- (temp.getPitch() * 8), (temp.getStopTick() - temp.getStartTick()) * scrollSheet.pixelsPerTick, 10);
+			
+		}
 
 		update();
 	}
@@ -108,7 +125,11 @@ public class C3Game extends ScreenPage {
 					.log((float) AudioInputProcessor.frequency / 440D))
 					/ Math.log(2D));
 			
+//			if(scrollSheet.currentActiveNote != null){
+//				currentPitch = scrollSheet.currentActiveNote.getPitch();
+//			}
 			
+			scrollSheet.update(currentTick);
 		}
 		
 		
@@ -121,9 +142,11 @@ public class C3Game extends ScreenPage {
 	}
 	
 	void start(){
-		System.out.println(scrollSheet.sourceTrack.getNotes());
-		
+		System.out.println(scrollSheet.sourceChannel.getNotes());
+
+		musicPlayer.play(C3Game.testMap);
 		startTime = System.currentTimeMillis();
+		//currentTick = -scrollSheet.getOffscreenTickDelta();
 		currentTick = 0;
 		
 		playing = true;

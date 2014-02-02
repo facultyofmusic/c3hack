@@ -58,4 +58,8 @@ public class Track {
 		}
 		return sb.toString();
 	}
+
+	public Channel[] getChannels() {
+		return channels;
+	}
 }
