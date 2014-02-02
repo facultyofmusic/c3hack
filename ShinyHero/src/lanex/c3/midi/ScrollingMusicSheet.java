@@ -1,7 +1,9 @@
 package lanex.c3.midi;
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.ListIterator;
 import java.util.Queue;
 
 import lanex.c3.C3App;
@@ -15,17 +17,26 @@ public class ScrollingMusicSheet {
 	public Note currentActiveNote;
 	public Channel sourceChannel;
 	public LinkedList<Note> activeNotes;
+	public LinkedList <Note> sourceNotes;
 	public int currentTick = -999;
 	public boolean done;
+	
+	ListIterator<Note> sourceListIterator;
 	
 	public ScrollingMusicSheet(Channel src){
 		sourceChannel = src;
 		activeNotes = new LinkedList<Note>();
+		//sourceNotes = (LinkedList)((LinkedList)(sourceChannel.getNotes())).clone();
+		sourceNotes = (LinkedList)sourceChannel.getNotes();
 		//notes = sourceTrack.getNotes();
+		sourceListIterator = sourceNotes.listIterator();
 	}
 	
 	void renderList(){
+
 		Iterator<Note> activeListIterator = activeNotes.iterator();
+		if (!sourceListIterator.hasNext() && !activeListIterator.hasNext())
+			done = true;
 		
 		while(activeListIterator.hasNext()){
 			Note temp = activeListIterator.next();
@@ -38,23 +49,25 @@ public class ScrollingMusicSheet {
 			
 		}
 		
-		Iterator<Note> sourceListIterator = ((Queue)((LinkedList)(sourceChannel.getNotes())).clone()).iterator();
 		
 		while(sourceListIterator.hasNext()){
 			Note temp = sourceListIterator.next();
 			if(temp.getStartTick() > currentTick+getOffscreenTickDelta()){
+				sourceListIterator.previous();
 				break;
 			}
 			//System.out.println("Adding Note with start time: " + temp.getStartTick());
-			sourceListIterator.remove();
 			
 			int frames = (short)((temp.getStopTick() - temp.getStartTick())*C3Game.testMap.getMillisPerTick()*60/1000);
 			temp.collisionHistory = new short[frames];
+
+			for(int i = 0; i < frames; i++){
+				temp.collisionHistory[i] = 0;
+			}
 					
 			activeNotes.push(temp);
 		}
-		if (!sourceListIterator.hasNext())
-			done = true;
+
 		
 	}
 	
@@ -98,8 +111,6 @@ public class ScrollingMusicSheet {
 			int nowFrame = (short)((currentTick - currentActiveNote.getStartTick())*C3Game.testMap.getMillisPerTick()*60/1000);
 			if(nowFrame < currentActiveNote.collisionHistory.length){
 				currentActiveNote.collisionHistory[nowFrame] = (short)(Math.abs(0.5 - pitchDifference) * 300);
-				C3Gameover.score += currentActiveNote.collisionHistory[nowFrame];
-				C3Gameover.indivScores.add(currentActiveNote.collisionHistory[nowFrame]);
 			}
 		}
 		

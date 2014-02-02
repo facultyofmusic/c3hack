@@ -26,7 +26,6 @@ public class C3Game extends ScreenPage {
 	private Button menu_button, start_button, pause_button;
 
 	static float currentPitch, pitchDifference;
-	static float[] history, pitchHistory;
 
 	static boolean playing;
 
@@ -85,25 +84,6 @@ public class C3Game extends ScreenPage {
 
 		drawStaff(g);
 		
-		if (history != null) {
-
-			// draw history
-			for (int x = 0; x < C3App.RENDER_WIDTH; x++) {
-				g.setColor(Color.gray);
-				g.fillRect(C3App.RENDER_WIDTH / 2 - x, C3App.RENDER_HEIGHT
-						+ 279 - (history[x] * 8), 1, 10);
-				g.setLineWidth(2);
-				g.setColor(Color.red);
-				g.fillRect(C3App.RENDER_WIDTH / 2 - x, C3App.RENDER_HEIGHT
-						+ 283 - (pitchHistory[x] * 8), 1, 2);
-			}
-
-			g.setColor(Color.gray);
-			g.drawLine(C3App.RENDER_WIDTH / 2, 0, C3App.RENDER_WIDTH / 2,
-					C3App.RENDER_HEIGHT);
-
-		}
-
 		//
 		//
 		// GUI
@@ -116,6 +96,9 @@ public class C3Game extends ScreenPage {
 			start_button.render(g);
 		//
 
+		
+		
+		// draw the scrolling music sheet
 		g.setLineWidth(0.5f);
 
 		Iterator<Note> activeListIterator = scrollSheet.activeNotes.iterator();
@@ -238,22 +221,13 @@ public class C3Game extends ScreenPage {
 				pitchDifference = 1;
 			}
 			scrollSheet.update(currentTick, pitchDifference);
-
-			for (int x = C3App.RENDER_WIDTH - 1; x > 0; x--) {
-				history[x] = history[x - 1];
-				pitchHistory[x] = pitchHistory[x - 1];
-			}
-			pitchHistory[0] = currentPitch;
-			history[0] = (int) (currentPitch + 0.5);
+			
 		}
 	}
 
 	void start() {
 		System.out.println(scrollSheet.sourceChannel.getNotes());
-
-		history = new float[C3App.RENDER_WIDTH];
-		pitchHistory = new float[C3App.RENDER_WIDTH];
-
+		
 		musicPlayer.play(C3Game.testMap);
 		// currentTick = -scrollSheet.getOffscreenTickDelta();
 		currentTick = 0;
