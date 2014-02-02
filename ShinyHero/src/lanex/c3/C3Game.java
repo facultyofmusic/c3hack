@@ -7,6 +7,7 @@ import lanex.c3.midi.MusicPlayer;
 import lanex.c3.midi.Note;
 import lanex.c3.midi.ScrollingMusicSheet;
 import lanex.engine.Button;
+import lanex.engine.ERM;
 import lanex.engine.ScreenPage;
 
 import org.newdawn.slick.Color;
@@ -27,7 +28,9 @@ public class C3Game extends ScreenPage {
 	public static MusicMap testMap;
 	public static MusicPlayer musicPlayer;
 	public static ScrollingMusicSheet scrollSheet;
-
+	
+	
+	int tickMakeUp = 50;
 	int currentTick;
 
 	public C3Game() {
@@ -45,8 +48,11 @@ public class C3Game extends ScreenPage {
 
 	@Override
 	public void render(GameContainer arg0, Graphics g) {
+		float powerColor = 1.0f*scrollSheet.powerLevel/1280;
+		Color darkFilter = new Color(powerColor, powerColor, powerColor);
+		
 		g.setColor(Color.white);
-		g.clear();
+		g.drawImage(ERM.getImage("game_background.png"), 0, 0, 0, 0, 1280, 720, darkFilter);
 
 		String[] notes = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#",
 				"A", "A#", "B" };
@@ -55,13 +61,14 @@ public class C3Game extends ScreenPage {
 				: "NaN";
 
 		// debug headphones
-		g.setColor(Color.white);
+		g.setColor(Color.black);
 
-		g.drawString((new StringBuilder("Note: ")).append(note).toString(), 20,
+		g.drawString((new StringBuilder("Note: ")).append(note).toString(), 180,
 				20);
 		g.drawString(
 				(new StringBuilder("Freq: ")).append(
-						AudioInputProcessor.frequency).toString(), 20, 40);
+						AudioInputProcessor.frequency).toString(), 20, 200);
+		
 		g.drawString((new StringBuilder("Pitch No.: ")).append(currentPitch)
 				.toString(), 20, 60);
 
@@ -74,6 +81,15 @@ public class C3Game extends ScreenPage {
 				20, 140);
 		g.drawString("Offscreen Delta: " + scrollSheet.getOffscreenTickDelta(),
 				20, 160);
+		
+		
+		//drawIndicators();
+		g.drawImage(ERM.getImage("scroll_overlay.png"), 0, 250);
+		
+		g.setColor(Color.gray);
+		g.drawLine(C3App.RENDER_WIDTH/2 - scrollSheet.pixelsPerTick * this.tickMakeUp, 120, C3App.RENDER_WIDTH/2 - scrollSheet.pixelsPerTick * this.tickMakeUp, 600);
+		
+		
 
 		drawStaff(g);
 		
@@ -89,8 +105,7 @@ public class C3Game extends ScreenPage {
 			start_button.render(g);
 		//
 
-		
-		
+
 		// draw the scrolling music sheet
 		g.setLineWidth(0.5f);
 
@@ -136,6 +151,10 @@ public class C3Game extends ScreenPage {
 			}
 
 		}
+		
+		g.drawImage(ERM.getImage("power_bar.png"), 0, 688, 0, 0, 1280, 32, darkFilter);
+		g.setColor(Color.black);
+		g.fillRect(scrollSheet.powerLevel, 688, 1280, 720);
 
 		update();
 	}
@@ -215,7 +234,7 @@ public class C3Game extends ScreenPage {
 			} else {
 				pitchDifference = 1;
 			}
-			scrollSheet.update(currentTick, pitchDifference);
+			scrollSheet.update(currentTick + 50, pitchDifference);
 			
 		}
 	}

@@ -20,6 +20,7 @@ public class ScrollingMusicSheet {
 	public LinkedList <Note> sourceNotes;
 	public int currentTick = -999;
 	public boolean done;
+	public int powerLevel = 600;
 	
 	ListIterator<Note> sourceListIterator;
 	
@@ -104,12 +105,16 @@ public class ScrollingMusicSheet {
 		if(currentActiveNote != null && currentActiveNote.collisionHistory != null){
 			
 			if(Math.abs(pitchDifference) % 12 > 0.5){
+				powerLevel -= 1;
 				return;
 			}
 			
 			//int frames = (short)((currentActiveNote.getStopTick() - currentActiveNote.getStartTick())*C3Game.testMap.getMillisPerTick()*60/1000);
 			int nowFrame = (short)((currentTick - currentActiveNote.getStartTick())*C3Game.testMap.getMillisPerTick()*60/1000);
 			if(nowFrame < currentActiveNote.collisionHistory.length){
+				if(powerLevel < 1280){
+					powerLevel += 1;
+				}
 				currentActiveNote.collisionHistory[nowFrame] = (short)(Math.abs(0.5 - pitchDifference) * 300);
 			}
 		}
