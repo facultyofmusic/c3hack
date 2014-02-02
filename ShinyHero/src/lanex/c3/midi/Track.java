@@ -1,43 +1,34 @@
 package lanex.c3.midi;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Queue;
-
-public class Track implements Iterable<Note> {
-	private LinkedList<Note> notes;
+public class Track {
+	private Channel[] channels;
+	private int trackNumber;
+//	private LinkedList<Note> notes;
 	
-	public Track(int number) {
-		notes = new LinkedList<Note>();
+	public Track(int trackNumber, int numberOfChannels) {
+		channels = new Channel[numberOfChannels];
+		this.trackNumber = trackNumber;
 	}
 	
-	public void addNote(Note note) {
-		notes.add(note);
-	}
-	
-	public void removeLastNote() {
-		notes.removeLast();
-	}
-	
-	public LinkedList<Note> getNotes() {
-		return notes;
-	}
-	
-	public int getNotesSize() {
-		return notes.size();
-	}
-	
-	@Override
-	public Iterator<Note> iterator() {
-		return notes.iterator();
-	}
-	
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		for (Note note : this) {
-			sb.append(note + " ");
+	public void addNoteToChannel(int channelNumber, Note note) {
+		//notes.add(note);
+		if (channels[channelNumber] == null) {
+			channels[channelNumber] = new Channel(channelNumber);
 		}
-		return sb.toString();
+		channels[channelNumber].addNote(note);
+	}
+	
+	//returns whether any of the channels contain any meaningful notes
+	public boolean hasNotes() {
+		for (Channel channel : channels) {
+			if (channel != null) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public Channel getChannel(int channelNumber) {
+		return channels[channelNumber];
 	}
 }

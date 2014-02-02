@@ -61,7 +61,7 @@ public class MusicPlayer {
 	public static void main(String[] args) // REMOVE WHEN DONE TESTING
 	{
 		MusicPlayer mp = new MusicPlayer();
-		MusicMap map = MusicMap.fromPath("data/music/for_elise_by_beethoven.mid");
+		MusicMap map = MusicMap.fromPath("mid/th07_20.mid");
 		mp.play(map);
 		try
 		{
