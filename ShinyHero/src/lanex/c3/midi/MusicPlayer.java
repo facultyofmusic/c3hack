@@ -72,7 +72,7 @@ public class MusicPlayer {
 	public static void main(String[] args) // REMOVE WHEN DONE TESTING
 	{
 		MusicPlayer mp = new MusicPlayer();
-		MusicMap map = MusicMap.fromPath("mid/th07_20.mid");
+		MusicMap map = MusicMap.fromPath("mid/for_elise_by_beethoven.mid");
 		mp.play(map);
 		try
 		{
@@ -82,7 +82,7 @@ public class MusicPlayer {
 		{
 			e.printStackTrace();
 		}
-		mp.stop();
+		//mp.stop();
 	}
 	
 	

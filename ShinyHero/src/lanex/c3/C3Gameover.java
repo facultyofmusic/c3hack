@@ -10,12 +10,14 @@ import org.newdawn.slick.Graphics;
 
 public class C3Gameover extends ScreenPage{
 	
-	private Button menu_button;
+	private Button menu_button, retry_button;
 	
 	public C3Gameover(){
-		menu_button = new Button(C3App.RENDER_WIDTH/2 - 200,  550, 400, 100, "menu_button.png");
+		menu_button = new Button(C3App.RENDER_WIDTH - 309, 585, 256, 85,
+				"btn_mainmenu.png");
+		retry_button = new Button(C3App.RENDER_WIDTH / 2 - 225, 520, 450, 150,
+				"btn_reset.png");
 	}
-
 	@Override
 	public void render(GameContainer container, Graphics g) {
 		// PROCESSING
@@ -28,9 +30,10 @@ public class C3Gameover extends ScreenPage{
 		//System.out.println("IMAGE: " + ERM.getImage("room.png"));
 
 		
-		g.drawImage(ERM.getImage("gameover_back.png"), 0, 0);
+		g.drawImage(ERM.getImage("def_background.png"), 0, 0);
 		
 		menu_button.render(g);
+		retry_button.render(g);
 		
 		
 		// WIDTH SHOULD BE 400

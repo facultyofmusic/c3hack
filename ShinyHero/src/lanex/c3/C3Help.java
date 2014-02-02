@@ -13,7 +13,7 @@ public class C3Help extends ScreenPage{
 	private Button menu_button;
 	
 	public C3Help(){
-		menu_button = new Button(100,  600, 400, 100, "menu_button.png");
+		menu_button = new Button(100,  600, 400, 100, "btn_mainmenu.png");
 	}
 
 	@Override

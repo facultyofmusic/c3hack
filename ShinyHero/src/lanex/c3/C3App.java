@@ -53,9 +53,9 @@ public class C3App extends BasicGame implements ComponentListener {
 
 		pages.put("splash", splash);
 		pages.put("game", new C3Game());
-		pages.put("main_menu", new C3Menu());
+		//pages.put("main_menu", new C3Menu());
 		pages.put("help", new C3Help());
-		pages.put("custom", new C3Customization());
+		pages.put("main_menu", new C3Customization());
 		pages.put("gameover", new C3Gameover());
 
 		setPage("splash");
