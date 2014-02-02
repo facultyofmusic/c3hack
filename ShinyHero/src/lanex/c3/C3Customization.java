@@ -1,5 +1,6 @@
 package lanex.c3;
 
+import java.awt.Font;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.List;
@@ -17,9 +18,12 @@ import lanex.engine.ScreenPage;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.TrueTypeFont;
 
 public class C3Customization extends ScreenPage {
+	protected static final TrueTypeFont TEXT_FONT = new TrueTypeFont(new Font("sans-serif", Font.BOLD, 20), true);
 
+	
 	private Button start_button, exit_button, help_button,
 			increase_speed_button, decrease_speed_button;
 
@@ -37,10 +41,10 @@ public class C3Customization extends ScreenPage {
 		exit_button = new Button(C3App.RENDER_WIDTH - 309, 585, 256, 85,
 				"btn_exit.png", Color.red);
 		help_button = new Button(53, 585, 256, 85, "btn_help.png", Color.yellow);
-		increase_speed_button = new Button(C3App.RENDER_WIDTH - 210, 50, 200,
-				50, "speed_up.png", Color.cyan);
-		decrease_speed_button = new Button(C3App.RENDER_WIDTH / 2 + 130, 50,
-				200, 50, "speed_down.png", Color.magenta);
+		increase_speed_button = new Button(C3App.RENDER_WIDTH - 150, 50, 100,
+				100, "btn_plus.png", Color.cyan);
+		decrease_speed_button = new Button(C3App.RENDER_WIDTH - 350, 50,
+				100, 100, "btn_minus.png", Color.magenta);
 
 		File mid = new File("mid/");
 		File[] mids = mid.listFiles(new FilenameFilter() {
@@ -84,7 +88,9 @@ public class C3Customization extends ScreenPage {
 		increase_speed_button.render(g);
 		decrease_speed_button.render(g);
 
-		g.drawString("" + speed, C3App.RENDER_WIDTH - 280, 70);
+		TEXT_FONT.drawString(C3App.RENDER_WIDTH - 230, 75, "SPEED");
+		float width = TEXT_FONT.getWidth(speed*2 + "x");
+		TEXT_FONT.drawString(C3App.RENDER_WIDTH - 200 - width/2, 100, speed*2 + "x");
 		
 		// WIDTH SHOULD BE 400
 		// HEIGHT SHOULD BE 100
@@ -107,6 +113,8 @@ public class C3Customization extends ScreenPage {
 	public void mouseMoved(int oldx, int oldy, int newx, int newy) {
 		help_button.updateHoverStatus(newx, newy);
 		exit_button.updateHoverStatus(newx, newy);
+		increase_speed_button.updateHoverStatus(newx, newy);
+		decrease_speed_button.updateHoverStatus(newx, newy);
 
 		if (channelList != null) {
 			// only update the start hover if the channel is selected
