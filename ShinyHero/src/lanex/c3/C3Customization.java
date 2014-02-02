@@ -20,10 +20,13 @@ import org.newdawn.slick.Graphics;
 
 public class C3Customization extends ScreenPage {
 
-	private Button start_button, exit_button, help_button, easy_button;
+	private Button start_button, exit_button, help_button,
+			increase_speed_button, decrease_speed_button;
 
 	private ButtonList<ButtonList<Channel>> songList;
 	private ButtonList<Channel> channelList;
+	
+	private float speed = 0.5f;
 
 	private File currentSong;
 	private Object currentTrack;
@@ -34,6 +37,10 @@ public class C3Customization extends ScreenPage {
 		exit_button = new Button(C3App.RENDER_WIDTH - 309, 585, 256, 85,
 				"btn_exit.png", Color.red);
 		help_button = new Button(53, 585, 256, 85, "btn_help.png", Color.yellow);
+		increase_speed_button = new Button(C3App.RENDER_WIDTH - 210, 50, 200,
+				50, "speed_up.png", Color.cyan);
+		decrease_speed_button = new Button(C3App.RENDER_WIDTH / 2 + 130, 50,
+				200, 50, "speed_down.png", Color.magenta);
 
 		File mid = new File("mid/");
 		File[] mids = mid.listFiles(new FilenameFilter() {
@@ -74,7 +81,11 @@ public class C3Customization extends ScreenPage {
 		start_button.render(g);
 		exit_button.render(g);
 		help_button.render(g);
+		increase_speed_button.render(g);
+		decrease_speed_button.render(g);
 
+		g.drawString("" + speed, C3App.RENDER_WIDTH - 280, 70);
+		
 		// WIDTH SHOULD BE 400
 		// HEIGHT SHOULD BE 100
 
@@ -97,9 +108,8 @@ public class C3Customization extends ScreenPage {
 		help_button.updateHoverStatus(newx, newy);
 		exit_button.updateHoverStatus(newx, newy);
 
-
 		if (channelList != null) {
-			//only update the start hover if the channel is selected
+			// only update the start hover if the channel is selected
 			if (channelList.getSelected() != null) {
 				start_button.updateHoverStatus(newx, newy);
 			}
@@ -122,23 +132,37 @@ public class C3Customization extends ScreenPage {
 		{
 			songList.checkButtons(x, y);
 			channelList = songList.getSelected();
-			if (channelList != null)
+
+			if (channelList != null) {
 				channelList.checkButtons(x, y);
+			}
+
+			if (increase_speed_button.ifOnButton(x, y)) {
+				speed += 0.125;
+			}
+			if (decrease_speed_button.ifOnButton(x, y)) {
+				speed -= 0.125;
+			}
+
 			if (start_button.ifOnButton(x, y) && channelList != null
 					&& channelList.getSelected() != null) {
 				C3Game.testMap = MusicMap.fromPath(songList.getSelectedName());
 				C3Gameover.lastName = songList.getSelectedName();
-				C3Game.musicPlayer = new MusicPlayer();
 				C3Game.scrollSheet = new ScrollingMusicSheet(
 						channelList.getSelected());
+				C3Game.musicPlayer = new MusicPlayer();
 				C3Gameover.lastChannel = channelList.getSelected();
 				
+				C3Game.scrollSheet.pixelsPerTick = speed;
+
 				System.out.println("SETTING: "
 						+ C3Game.scrollSheet.sourceChannel.getNotes());
 
+				
+				
 				C3Game.paused = false;
 				C3Game.playing = false;
-				
+
 				C3App.splash.reset();
 				C3SplashScreen.setRedirect("game");
 				C3App.setPage("splash");
