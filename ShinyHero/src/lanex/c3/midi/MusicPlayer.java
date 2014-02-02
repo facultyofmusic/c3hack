@@ -9,6 +9,10 @@ public class MusicPlayer {
 	
 	private Sequencer sequencer;
 	
+	public MusicPlayer() {
+		sequencer = null;
+	}
+	
 	public boolean isPlaying()
 	{
 		if (sequencer == null)
@@ -52,11 +56,6 @@ public class MusicPlayer {
 		{
 			e.printStackTrace();
 		}
-	}
-	
-	public MusicPlayer ()
-	{
-		sequencer = null;
 	}
 	
 	private static MidiDevice getReceivingDevice()
