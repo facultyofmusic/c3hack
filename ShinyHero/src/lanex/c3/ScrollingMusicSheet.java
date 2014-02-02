@@ -9,7 +9,7 @@ import lanex.c3.midi.Note;
 
 public class ScrollingMusicSheet {
 //	public static int ticksPerPixel
-	public float pixelsPerTick = 0.2f;
+	public float pixelsPerTick = 1f;
 	public Note currentActiveNote;
 	public Channel sourceChannel;
 	public LinkedList<Note> activeNotes;

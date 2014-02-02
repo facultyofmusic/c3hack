@@ -25,8 +25,8 @@ public class C3Game extends ScreenPage {
 	private Button menu_button, start_button;
 
 	static float currentPitch;
-	static float[] history = new float[C3App.RENDER_WIDTH],
-			pitchHistory = new float[C3App.RENDER_WIDTH];
+	static float[] history,
+			pitchHistory;
 	
 	boolean playing;
 	
@@ -78,21 +78,24 @@ public class C3Game extends ScreenPage {
 		g.drawString("Offscreen Delta: " + scrollSheet.getOffscreenTickDelta(), 20, 160);
 		
 
-		
-		// draw history
-		for (int x = 0; x < C3App.RENDER_WIDTH; x++) {
+		if(history != null){
+				
+			// draw history
+			for (int x = 0; x < C3App.RENDER_WIDTH; x++) {
+				g.setColor(Color.gray);
+				g.fillRect(C3App.RENDER_WIDTH / 2 - x, C3App.RENDER_HEIGHT + 279
+						- (history[x] * 8), 1, 10);
+				g.setLineWidth(2);
+				g.setColor(Color.red);
+				g.fillRect(C3App.RENDER_WIDTH / 2 - x, C3App.RENDER_HEIGHT + 283
+						- (pitchHistory[x] * 8), 1, 2);
+			}
+	
 			g.setColor(Color.gray);
-			g.fillRect(C3App.RENDER_WIDTH / 2 - x, C3App.RENDER_HEIGHT + 279
-					- (history[x] * 8), 1, 10);
-			g.setLineWidth(2);
-			g.setColor(Color.red);
-			g.fillRect(C3App.RENDER_WIDTH / 2 - x, C3App.RENDER_HEIGHT + 283
-					- (pitchHistory[x] * 8), 1, 2);
+			g.drawLine(C3App.RENDER_WIDTH / 2, 0, C3App.RENDER_WIDTH / 2,
+					C3App.RENDER_HEIGHT);
+			
 		}
-
-		g.setColor(Color.gray);
-		g.drawLine(C3App.RENDER_WIDTH / 2, 0, C3App.RENDER_WIDTH / 2,
-				C3App.RENDER_HEIGHT);
 
 		//
 		//
@@ -106,7 +109,7 @@ public class C3Game extends ScreenPage {
 		while(activeListIterator.hasNext()){
 			Note temp = activeListIterator.next();
 			
-			g.drawRect(C3App.RENDER_WIDTH / 2 - (currentTick-temp.getStartTick()) * scrollSheet.pixelsPerTick, C3App.RENDER_HEIGHT + 283
+			g.drawRect(C3App.RENDER_WIDTH / 2 - (currentTick-temp.getStartTick()) * scrollSheet.pixelsPerTick, C3App.RENDER_HEIGHT + 279
 					- (temp.getPitch() * 8), (temp.getStopTick() - temp.getStartTick()) * scrollSheet.pixelsPerTick, 10);
 			
 		}
@@ -125,25 +128,24 @@ public class C3Game extends ScreenPage {
 					.log((float) AudioInputProcessor.frequency / 440D))
 					/ Math.log(2D));
 			
-//			if(scrollSheet.currentActiveNote != null){
-//				currentPitch = scrollSheet.currentActiveNote.getPitch();
-//			}
-			
 			scrollSheet.update(currentTick);
-		}
 		
-		
-		for (int x = C3App.RENDER_WIDTH - 1; x > 0; x--) {
-			history[x] = history[x - 1];
-			pitchHistory[x] = pitchHistory[x - 1];
+			
+			for (int x = C3App.RENDER_WIDTH - 1; x > 0; x--) {
+				history[x] = history[x - 1];
+				pitchHistory[x] = pitchHistory[x - 1];
+			}
+			pitchHistory[0] = currentPitch;
+			history[0] = (int) (currentPitch + 0.5);
 		}
-		pitchHistory[0] = currentPitch;
-		history[0] = (int) (currentPitch + 0.5);
 	}
 	
 	void start(){
 		System.out.println(scrollSheet.sourceChannel.getNotes());
 
+	    history = new float[C3App.RENDER_WIDTH];
+		pitchHistory = new float[C3App.RENDER_WIDTH];
+		
 		musicPlayer.play(C3Game.testMap);
 		startTime = System.currentTimeMillis();
 		//currentTick = -scrollSheet.getOffscreenTickDelta();
@@ -180,6 +182,31 @@ public class C3Game extends ScreenPage {
 		// CHECK BUTTONS
 		{
 			if (menu_button.ifOnButton(x, y)) {
+
+//				static float currentPitch;
+//				static float[] history = new float[C3App.RENDER_WIDTH],
+//						pitchHistory = new float[C3App.RENDER_WIDTH];
+//				
+//				boolean playing;
+//				
+//				public static MusicMap testMap;
+//				public static MusicPlayer musicPlayer;
+//				public static ScrollingMusicSheet scrollSheet;
+//				
+//				long startTime, deltaTime;
+//				int currentTick;
+//				float pixelsPerTick = 2;
+				
+//				public static MusicMap testMap;
+//				public static MusicPlayer musicPlayer;
+//				public static ScrollingMusicSheet scrollSheet;
+				
+			    musicPlayer.stop();
+			    playing = false;
+			    
+			    currentPitch = 0;
+				
+				
 				C3App.splash.reset();
 				C3SplashScreen.setRedirect("main_menu");		
 				C3App.setPage("splash");
