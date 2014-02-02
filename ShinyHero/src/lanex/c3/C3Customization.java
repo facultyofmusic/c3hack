@@ -95,10 +95,14 @@ public class C3Customization extends ScreenPage {
 	@Override
 	public void mouseMoved(int oldx, int oldy, int newx, int newy) {
 		help_button.updateHoverStatus(newx, newy);
-		start_button.updateHoverStatus(newx, newy);
 		exit_button.updateHoverStatus(newx, newy);
 
+
 		if (channelList != null) {
+			//only update the start hover if the channel is selected
+			if (channelList.getSelected() != null) {
+				start_button.updateHoverStatus(newx, newy);
+			}
 			channelList.updateButtonHoverStatuses(newx, newy);
 		}
 		if (songList != null) {

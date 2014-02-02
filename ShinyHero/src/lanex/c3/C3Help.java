@@ -13,7 +13,8 @@ public class C3Help extends ScreenPage{
 	private Button menu_button;
 	
 	public C3Help(){
-		menu_button = new Button(100,  600, 400, 100, "btn_mainmenu.png", Color.red);
+		menu_button = new Button(C3App.RENDER_WIDTH - 309, 585, 256, 85,
+				"btn_mainmenu.png", Color.red);
 	}
 
 	@Override
