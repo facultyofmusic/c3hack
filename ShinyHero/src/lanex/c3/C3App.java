@@ -45,7 +45,7 @@ public class C3App extends BasicGame implements ComponentListener {
 		THC = C3InternalConsole.getInstance(con, this);
 		THC.append("initializing pages...");
 
-		C3SplashScreen.setRedirect("game");
+		C3SplashScreen.setRedirect("main_menu");
 		
 		pages = new HashMap<String, ScreenPage>();
 

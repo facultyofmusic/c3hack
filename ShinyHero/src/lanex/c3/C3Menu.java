@@ -23,14 +23,14 @@ public class C3Menu extends ScreenPage {
 	@Override
 	public void render(GameContainer container, Graphics g) {
 		// PROCESSING
-		if (music == null) {
-			try{
-				music = new Music("data/music/music.ogg");
-			}catch (Exception ex){
-				ex.printStackTrace();
-			}
-			music.loop();
-		}
+//		if (music == null) {
+//			try{
+//				music = new Music("data/music/music.ogg");
+//			}catch (Exception ex){
+//				ex.printStackTrace();
+//			}
+//			music.loop();
+//		}
 
 		g.clear();
 		g.setColor(Color.white);

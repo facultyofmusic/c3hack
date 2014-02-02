@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import lanex.c3.midi.MusicMap;
+import lanex.c3.midi.MusicPlayer;
 import lanex.engine.Button;
 import lanex.engine.ScreenPage;
 
@@ -27,9 +28,11 @@ public class C3Game extends ScreenPage {
 	
 	boolean playing;
 	
-	MusicMap testMap;
+	public static MusicMap testMap;
+	public static MusicPlayer musicPlayer;
+	public static ScrollingMusicSheet scrollSheet;
 	
-	long startTime, currentTime;
+	long startTime, deltaTime;
 	int currentTick;
 	
 
@@ -39,7 +42,7 @@ public class C3Game extends ScreenPage {
 		start_button = new Button(C3App.RENDER_WIDTH / 2, 600, 500, 100,
 				"start_button.png");
 		
-		testMap = MusicMap.fromPath("data/music/for_elise_by_beethoven.mid");
+		//testMap = MusicMap.fromPath("data/music/for_elise_by_beethoven.mid");
 		
 		playing = false;
 	}
@@ -65,7 +68,7 @@ public class C3Game extends ScreenPage {
 						AudioInputProcessor.frequency).toString(), 20, 40);
 		g.drawString((new StringBuilder("Pitch No.: ")).append(currentPitch)
 				.toString(), 20, 60);
-		g.drawString("Milliseconds Delta: " + (currentTime - startTime), 20, 80);
+		g.drawString("Milliseconds Delta: " + deltaTime, 20, 80);
 		g.drawString("Current Tick: " + currentTick, 20, 100);
 
 		
@@ -97,13 +100,15 @@ public class C3Game extends ScreenPage {
 	public void update() {
 		
 		if(playing){
-			currentTime = System.currentTimeMillis();
-			currentTick = (int) ((1.0f * currentTime - startTime)/1);
+			deltaTime = System.currentTimeMillis() - startTime;
+			currentTick = (int) (deltaTime / testMap.getMillisPerTick());
 
 
 			currentPitch = (float) (69D + (12D * Math
 					.log((float) AudioInputProcessor.frequency / 440D))
 					/ Math.log(2D));
+			
+			
 		}
 		
 		
@@ -116,6 +121,8 @@ public class C3Game extends ScreenPage {
 	}
 	
 	void start(){
+		System.out.println(scrollSheet.sourceTrack.getNotes());
+		
 		startTime = System.currentTimeMillis();
 		currentTick = 0;
 		
