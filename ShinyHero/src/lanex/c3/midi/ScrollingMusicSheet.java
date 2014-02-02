@@ -99,6 +99,7 @@ public class ScrollingMusicSheet {
 			if(nowFrame < currentActiveNote.collisionHistory.length){
 				currentActiveNote.collisionHistory[nowFrame] = (short)(Math.abs(0.5 - pitchDifference) * 300);
 				C3Gameover.score += currentActiveNote.collisionHistory[nowFrame];
+				C3Gameover.indivScores.add(currentActiveNote.collisionHistory[nowFrame]);
 			}
 		}
 		
