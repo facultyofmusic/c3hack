@@ -118,12 +118,12 @@ public class C3Game extends ScreenPage {
 						(int) (C3App.RENDER_WIDTH / 2
 								- (currentTick - temp.getStartTick())
 								* scrollSheet.pixelsPerTick + x * pieceLength),
-						C3App.RENDER_HEIGHT + 279 - (temp.getPitch() * 8),
+								C3App.RENDER_HEIGHT - getDistanceFromBottom(temp.getPitch()),
 						pieceLength + 1, 10);
 
 			}
 
-			g.setColor(Color.gray);
+			g.setColor(Color.lightGray);
 			g.drawRect(
 					C3App.RENDER_WIDTH / 2
 							- (currentTick - temp.getStartTick())
@@ -135,9 +135,10 @@ public class C3Game extends ScreenPage {
 			//draw sharp symbol
 			int semiTones = temp.getPitch() % 12;
 			if (semiTones == 1 || semiTones == 3 || semiTones == 6 || semiTones == 8 || semiTones == 10) {
+				g.setColor(Color.lightGray);
 				g.drawString("#", C3App.RENDER_WIDTH / 2
 							- (currentTick - temp.getStartTick())
-							* scrollSheet.pixelsPerTick - 20, C3App.RENDER_HEIGHT
+							* scrollSheet.pixelsPerTick - 10, C3App.RENDER_HEIGHT
 							- getDistanceFromBottom(temp.getPitch()));
 			}
 
@@ -150,8 +151,8 @@ public class C3Game extends ScreenPage {
 		g.setColor(Color.white);
 		g.setLineWidth(2);
 		for (int i = 0; i < 5; i++) {
-			g.drawLine(0, C3App.RENDER_HEIGHT - 240 - 16 * i, 
-					C3App.RENDER_WIDTH, C3App.RENDER_HEIGHT - 240 - 16 * i);
+			g.drawLine(0, C3App.RENDER_HEIGHT - 292 - 16 * i, 
+					C3App.RENDER_WIDTH, C3App.RENDER_HEIGHT - 292 - 16 * i);
 		}
 	}
 	
@@ -177,6 +178,7 @@ public class C3Game extends ScreenPage {
 			break;
 		//F, F#
 		case 5:
+		case 6:
 			semitoneOffset = 3 * GAP_HEIGHT;
 			break;
 		//G,G#
