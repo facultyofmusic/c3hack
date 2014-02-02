@@ -1,9 +1,11 @@
 package lanex.c3.midi;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MetaMessage;
 import javax.sound.midi.MidiEvent;
 import javax.sound.midi.MidiMessage;
@@ -73,11 +75,12 @@ public class MusicMap {
 	        	}
 	        	trackNumber++;
 	        }
-	        
-	        
-		} catch (Exception e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (MidiUnavailableException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidMidiDataException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
