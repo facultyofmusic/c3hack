@@ -24,7 +24,7 @@ public class MusicMap {
 	public static final int NOTE_ON_F = 0x9F;
 	public static final int NOTE_OFF_0 = 0x80;
 	public static final int NOTE_OFF_F = 0x8F;
-	public static final int INSTRUMENT = 255;
+	public static final int INSTRUMENT = 0xC0;
 	
 	private String filePath;
 	
@@ -120,8 +120,6 @@ public class MusicMap {
             	MetaMessage mm = (MetaMessage) message;
             	if (mm.getType() == 4)
             	{
-            		
-            		System.out.print("Instrument is: ");
             		byte [] tempArr = mm.getData();
             		char [] charArr = new char[tempArr.length];
             		for (int j = 0; j < charArr.length; j++)

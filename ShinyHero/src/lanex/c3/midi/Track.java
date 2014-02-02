@@ -31,4 +31,8 @@ public class Track {
 	public Channel getChannel(int channelNumber) {
 		return channels[channelNumber];
 	}
+
+	public Channel[] getChannels() {
+		return channels;
+	}
 }

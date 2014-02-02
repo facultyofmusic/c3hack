@@ -1,23 +1,22 @@
 package lanex.c3;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import lanex.c3.midi.Channel;
 import lanex.c3.midi.Note;
-import lanex.c3.midi.Track;
 
 
 public class ScrollingMusicSheet {
 //	public static int ticksPerPixel
 	public float pixelsPerTick = 0.2f;
 	public Note currentActiveNote;
-	public Track sourceTrack;
+	public Channel sourceChannel;
 	public LinkedList<Note> activeNotes;
 	public int currentTick = -999;
 	
-	public ScrollingMusicSheet(Track src){
-		sourceTrack = src;
+	public ScrollingMusicSheet(Channel src){
+		sourceChannel = src;
 		activeNotes = new LinkedList<Note>();
 		//notes = sourceTrack.getNotes();
 	}
@@ -36,7 +35,7 @@ public class ScrollingMusicSheet {
 			
 		}
 		
-		Iterator<Note> sourceListIterator = sourceTrack.getNotes().iterator();
+		Iterator<Note> sourceListIterator = sourceChannel.getNotes().iterator();
 		
 		while(sourceListIterator.hasNext()){
 			Note temp = sourceListIterator.next();

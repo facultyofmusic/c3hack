@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.util.List;
 
+import lanex.c3.midi.Channel;
 import lanex.c3.midi.MusicMap;
 import lanex.c3.midi.MusicPlayer;
 import lanex.c3.midi.Track;
@@ -18,8 +19,8 @@ import org.newdawn.slick.Graphics;
 public class C3Customization extends ScreenPage {
 
 	private Button hell_button, menu_button;
-	private ButtonList<ButtonList<Track>> songList;
-	private ButtonList<Track> trackList;
+	private ButtonList<ButtonList<Channel>> songList;
+	private ButtonList<Channel> channelList;
 
 	private File currentSong;
 	private Object currentTrack;
@@ -30,22 +31,26 @@ public class C3Customization extends ScreenPage {
 		menu_button = new Button(C3App.RENDER_WIDTH / 2 - 600, 550, 400, 100,
 				"menu_button.png");
 
-		File mid = new File("data/music");
+		File mid = new File("mid/");
 		File[] mids = mid.listFiles(new FilenameFilter() {
 			public boolean accept(File dir, String name) {
 				return name.endsWith(".mid");
 			}
 		});
-		songList = new ButtonList<>(10,10,C3App.RENDER_WIDTH/2-15);
-		for (File f : mids)
-		{
+		songList = new ButtonList<>(10, 10, C3App.RENDER_WIDTH / 2 - 15);
+		for (File f : mids) {
 			List<Track> temp = MusicMap.fromPath(f.getPath()).getTrackList();
-			trackList = new ButtonList<>(C3App.RENDER_WIDTH/2 + 5,10,C3App.RENDER_WIDTH/2-15); //Temporary to save declaration space. Is nulled later.
+			channelList = new ButtonList<>(C3App.RENDER_WIDTH / 2 + 5, 10,
+					C3App.RENDER_WIDTH / 2 - 15); // Temporary to save
+													// declaration space. Is
+													// nulled later.
 			for (Track t : temp)
-				trackList.addMember(t, t.toString());
-			songList.addMember(trackList, f.getPath());
+				for (Channel c : t.getChannels())
+					if (c != null)
+						channelList.addMember(c, c.toString());
+			songList.addMember(channelList, f.getPath());
 		}
-		trackList = null;
+		channelList = null;
 	}
 
 	@Override
@@ -58,10 +63,10 @@ public class C3Customization extends ScreenPage {
 		// System.out.println("IMAGE: " + ERM.getImage("room.png"));
 
 		g.drawImage(ERM.getImage("custom_back.png"), 0, 0);
-		
+
 		songList.render(g);
-		if (trackList != null)
-			trackList.render(g);
+		if (channelList != null)
+			channelList.render(g);
 		hell_button.render(g);
 		menu_button.render(g);
 
@@ -99,16 +104,18 @@ public class C3Customization extends ScreenPage {
 		// CHECK BUTTONS
 		{
 			songList.checkButtons(x, y);
-			trackList = songList.getSelected();
-			if (trackList != null)
-				trackList.checkButtons(x, y);
+			channelList = songList.getSelected();
+			if (channelList != null)
+				channelList.checkButtons(x, y);
 			if (hell_button.ifOnButton(x, y)) {
-				
+
 				C3Game.testMap = MusicMap.fromPath(songList.getSelectedName());
 				C3Game.musicPlayer = new MusicPlayer();
-				C3Game.scrollSheet = new ScrollingMusicSheet(trackList.getSelected());
-				System.out.println("SETTING: " + C3Game.scrollSheet.sourceTrack.getNotes());
-				
+				C3Game.scrollSheet = new ScrollingMusicSheet(
+						channelList.getSelected());
+				System.out.println("SETTING: "
+						+ C3Game.scrollSheet.sourceChannel.getNotes());
+
 				C3App.splash.reset();
 				C3SplashScreen.setRedirect("game");
 				C3App.setPage("splash");

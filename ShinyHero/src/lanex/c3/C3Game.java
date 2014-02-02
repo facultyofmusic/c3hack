@@ -142,7 +142,7 @@ public class C3Game extends ScreenPage {
 	}
 	
 	void start(){
-		System.out.println(scrollSheet.sourceTrack.getNotes());
+		System.out.println(scrollSheet.sourceChannel.getNotes());
 
 		musicPlayer.play(C3Game.testMap);
 		startTime = System.currentTimeMillis();
