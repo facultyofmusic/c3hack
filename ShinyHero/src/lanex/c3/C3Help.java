@@ -13,7 +13,7 @@ public class C3Help extends ScreenPage{
 	private Button menu_button;
 	
 	public C3Help(){
-		menu_button = new Button(100,  600, 400, 100, "btn_mainmenu.png");
+		menu_button = new Button(100,  600, 400, 100, "btn_mainmenu.png", Color.red);
 	}
 
 	@Override
@@ -53,7 +53,7 @@ public class C3Help extends ScreenPage{
 
 	@Override
 	public void mouseMoved(int oldx, int oldy, int newx, int newy) {
-		// TODO Auto-generated method stub
+		menu_button.updateHoverStatus(newx, newy);
 		
 	}
 

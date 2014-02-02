@@ -23,7 +23,7 @@ import org.newdawn.slick.SlickException;
 import ui.AudioInputProcessor;
 
 public class C3Game extends ScreenPage {
-	private Button menu_button, start_button;
+	private Button menu_button, start_button, pause_button;
 
 	static float currentPitch, pitchDifference;
 	static float[] history,
@@ -38,10 +38,13 @@ public class C3Game extends ScreenPage {
 	int currentTick;
 
 	public C3Game() {
-		menu_button = new Button(C3App.RENDER_WIDTH / 2 + 400, 600, 500, 100,
-				"menu_button.png");
-		start_button = new Button(C3App.RENDER_WIDTH / 2, 600, 500, 100,
-				"start_button.png");
+		menu_button = new Button(C3App.RENDER_WIDTH - 309, 50, 256, 85,
+				"btn_mainmenu.png", Color.red);
+		start_button = new Button(C3App.RENDER_WIDTH / 2 - 225, 520, 450, 150,
+				"btn_start.png", Color.green);
+		pause_button = new Button(C3App.RENDER_WIDTH - 565, 50, 256, 85,
+				"btn_pause2.png", Color.cyan);
+		
 		
 		//testMap = MusicMap.fromPath("data/music/for_elise_by_beethoven.mid");
 		
@@ -102,7 +105,10 @@ public class C3Game extends ScreenPage {
 		//
 		// GUI
 		menu_button.render(g);
-		start_button.render(g);
+		if (playing)
+			pause_button.render(g);
+		else
+			start_button.render(g);
 		//
 		
 		g.setLineWidth(0.5f);
@@ -189,8 +195,9 @@ public class C3Game extends ScreenPage {
 
 	@Override
 	public void mouseMoved(int oldx, int oldy, int newx, int newy) {
-		// TODO Auto-generated method stub
-
+		menu_button.updateHoverStatus(newx, newy);
+		start_button.updateHoverStatus(newx, newy);
+		pause_button.updateHoverStatus(newx, newy);
 	}
 
 	@Override

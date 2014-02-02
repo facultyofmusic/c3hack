@@ -50,7 +50,7 @@ public class ButtonList<T> {
 	public void addMember(T member, String memberName) {
 		members.add(member);
 		buttons.add(new Button(startX, startY + numMembers * 22, width, 20,
-				memberName));
+				memberName, null));
 		numMembers++;
 	}
 

@@ -14,9 +14,9 @@ public class C3Gameover extends ScreenPage{
 	
 	public C3Gameover(){
 		menu_button = new Button(C3App.RENDER_WIDTH - 309, 585, 256, 85,
-				"btn_mainmenu.png");
+				"btn_mainmenu.png", Color.red);
 		retry_button = new Button(C3App.RENDER_WIDTH / 2 - 225, 520, 450, 150,
-				"btn_reset.png");
+				"btn_reset.png", Color.green);
 	}
 	@Override
 	public void render(GameContainer container, Graphics g) {
@@ -55,8 +55,8 @@ public class C3Gameover extends ScreenPage{
 
 	@Override
 	public void mouseMoved(int oldx, int oldy, int newx, int newy) {
-		// TODO Auto-generated method stub
-		
+		menu_button.updateHoverStatus(newx, newy);
+		retry_button.updateHoverStatus(newx, newy);
 	}
 
 	@Override

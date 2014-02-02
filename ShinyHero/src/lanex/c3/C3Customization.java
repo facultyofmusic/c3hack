@@ -14,6 +14,7 @@ import lanex.engine.ButtonList;
 import lanex.engine.ERM;
 import lanex.engine.ScreenPage;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 
@@ -23,16 +24,16 @@ public class C3Customization extends ScreenPage {
 
 	private ButtonList<ButtonList<Channel>> songList;
 	private ButtonList<Channel> channelList;
-
+	
 	private File currentSong;
 	private Object currentTrack;
 
 	public C3Customization() {
 		start_button = new Button(C3App.RENDER_WIDTH / 2 - 225, 520, 450, 150,
-				"btn_start.png");
+				"btn_start.png", Color.green);
 		exit_button = new Button(C3App.RENDER_WIDTH - 309, 585, 256, 85,
-				"btn_mainmenu.png");
-		help_button = new Button(53, 585, 256, 85, "btn_help.png");
+				"btn_mainmenu.png", Color.red);
+		help_button = new Button(53, 585, 256, 85, "btn_help.png", Color.yellow);
 
 		File mid = new File("mid/");
 		File[] mids = mid.listFiles(new FilenameFilter() {
@@ -93,7 +94,9 @@ public class C3Customization extends ScreenPage {
 
 	@Override
 	public void mouseMoved(int oldx, int oldy, int newx, int newy) {
-		// TODO Auto-generated method stub
+		help_button.updateHoverStatus(newx, newy);
+		start_button.updateHoverStatus(newx, newy);
+		exit_button.updateHoverStatus(newx, newy);
 
 	}
 
@@ -111,7 +114,7 @@ public class C3Customization extends ScreenPage {
 			channelList = songList.getSelected();
 			if (channelList != null)
 				channelList.checkButtons(x, y);
-			if (start_button.ifOnButton(x, y)) {
+			if (start_button.ifOnButton(x, y) && channelList != null && channelList.getSelected() != null) {
 				C3Game.testMap = MusicMap.fromPath(songList.getSelectedName());
 				C3Game.musicPlayer = new MusicPlayer();
 				C3Game.scrollSheet = new ScrollingMusicSheet(
@@ -119,9 +122,9 @@ public class C3Customization extends ScreenPage {
 				System.out.println("SETTING: "
 						+ C3Game.scrollSheet.sourceChannel.getNotes());
 
-				C3App.splash.reset();
-				C3SplashScreen.setRedirect("game");
-				C3App.setPage("splash");
+				//C3App.splash.reset();
+				//C3SplashScreen.setRedirect("game");
+				C3App.setPage("game");
 			} else if (exit_button.ifOnButton(x, y)) {
 				System.exit(0);
 			} else if (help_button.ifOnButton(x, y)) {
