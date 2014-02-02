@@ -26,6 +26,11 @@ public class MusicPlayer {
 		sequencer.stop();
 	}
 	
+	public void resume()
+	{
+		sequencer.start();
+	}
+	
 	public void play(MusicMap map)
 	{
 		try

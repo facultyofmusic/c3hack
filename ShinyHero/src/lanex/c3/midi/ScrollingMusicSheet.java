@@ -2,9 +2,11 @@ package lanex.c3.midi;
 
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Queue;
 
 import lanex.c3.C3App;
 import lanex.c3.C3Game;
+import lanex.c3.C3Gameover;
 
 
 public class ScrollingMusicSheet {
@@ -14,6 +16,7 @@ public class ScrollingMusicSheet {
 	public Channel sourceChannel;
 	public LinkedList<Note> activeNotes;
 	public int currentTick = -999;
+	public boolean done;
 	
 	public ScrollingMusicSheet(Channel src){
 		sourceChannel = src;
@@ -35,7 +38,7 @@ public class ScrollingMusicSheet {
 			
 		}
 		
-		Iterator<Note> sourceListIterator = sourceChannel.getNotes().iterator();
+		Iterator<Note> sourceListIterator = ((Queue)((LinkedList)(sourceChannel.getNotes())).clone()).iterator();
 		
 		while(sourceListIterator.hasNext()){
 			Note temp = sourceListIterator.next();
@@ -49,8 +52,9 @@ public class ScrollingMusicSheet {
 			temp.collisionHistory = new short[frames];
 					
 			activeNotes.push(temp);
-			
 		}
+		if (!sourceListIterator.hasNext())
+			done = true;
 		
 	}
 	
@@ -94,6 +98,7 @@ public class ScrollingMusicSheet {
 			int nowFrame = (short)((currentTick - currentActiveNote.getStartTick())*C3Game.testMap.getMillisPerTick()*60/1000);
 			if(nowFrame < currentActiveNote.collisionHistory.length){
 				currentActiveNote.collisionHistory[nowFrame] = (short)(Math.abs(0.5 - pitchDifference) * 300);
+				C3Gameover.score += currentActiveNote.collisionHistory[nowFrame];
 			}
 		}
 		
