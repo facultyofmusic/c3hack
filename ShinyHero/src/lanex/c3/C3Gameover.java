@@ -51,12 +51,13 @@ public class C3Gameover extends ScreenPage {
 			for (Short s: n.collisionHistory){
 				score += s>0?1:0;
 				maxScore += 1;
+				hit = s > 0 | hit;
 			}
-			notesMissed += hit?0:1;
+			notesMissed += hit?1:0;
 		}
 
-		g.drawString(notesMissed / lastChannel.getNotesSize() + "% notes hit", 10, 30);
-		g.drawString(lastName + " : " + score / maxScore + "% score", 10, 10);
+		g.drawString(notesMissed / lastChannel.getNotesSize()*100 + "% notes hit", 10, 30);
+		g.drawString(lastName + " : " + score / maxScore*100 + "% score", 10, 10);
 
 
 		

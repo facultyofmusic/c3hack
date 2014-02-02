@@ -33,7 +33,10 @@ public class ScrollingMusicSheet {
 	}
 	
 	void renderList(){
+
 		Iterator<Note> activeListIterator = activeNotes.iterator();
+		if (!sourceListIterator.hasNext() && !activeListIterator.hasNext())
+			done = true;
 		
 		while(activeListIterator.hasNext()){
 			Note temp = activeListIterator.next();
@@ -64,8 +67,7 @@ public class ScrollingMusicSheet {
 					
 			activeNotes.push(temp);
 		}
-		if (!sourceListIterator.hasNext() && !activeListIterator.hasNext())
-			done = true;
+
 		
 	}
 	
