@@ -171,6 +171,10 @@ public class Channel implements Iterable<Note> {
 		}
 	}
 	
+	public String getName() {
+		return instrumentNames + " (" + channelNumber + ")";
+	}
+	
 	@Override
 	public Iterator<Note> iterator() {
 		return notes.iterator();
