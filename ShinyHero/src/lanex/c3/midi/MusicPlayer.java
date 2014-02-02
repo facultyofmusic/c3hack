@@ -32,6 +32,11 @@ public class MusicPlayer {
 		}
 	}
 	
+	public void resume()
+	{
+		sequencer.start();
+	}
+	
 	public void play(MusicMap map)
 	{
 		try

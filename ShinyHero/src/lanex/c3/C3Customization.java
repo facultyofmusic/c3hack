@@ -24,7 +24,7 @@ public class C3Customization extends ScreenPage {
 
 	private ButtonList<ButtonList<Channel>> songList;
 	private ButtonList<Channel> channelList;
-	
+
 	private File currentSong;
 	private Object currentTrack;
 
@@ -46,8 +46,8 @@ public class C3Customization extends ScreenPage {
 			List<Track> temp = MusicMap.fromPath(f.getPath()).getTrackList();
 			channelList = new ButtonList<>(C3App.RENDER_WIDTH / 2 - 130, 50,
 					250); // Temporary to save
-													// declaration space. Is
-													// nulled later.
+							// declaration space. Is
+							// nulled later.
 			for (Track t : temp)
 				for (Channel c : t.getChannels())
 					if (c != null)
@@ -124,17 +124,26 @@ public class C3Customization extends ScreenPage {
 			channelList = songList.getSelected();
 			if (channelList != null)
 				channelList.checkButtons(x, y);
-			if (start_button.ifOnButton(x, y) && channelList != null && channelList.getSelected() != null) {
+			if (start_button.ifOnButton(x, y) && channelList != null
+					&& channelList.getSelected() != null) {
 				C3Game.testMap = MusicMap.fromPath(songList.getSelectedName());
+				C3Gameover.lastName = songList.getSelectedName();
 				C3Game.musicPlayer = new MusicPlayer();
 				C3Game.scrollSheet = new ScrollingMusicSheet(
 						channelList.getSelected());
+				C3Gameover.lastChannel = channelList.getSelected();
+				C3Gameover.indivScores.clear();
+				C3Gameover.maxScore = C3Gameover.lastChannel.getNotes().size()*300;
+				
 				System.out.println("SETTING: "
 						+ C3Game.scrollSheet.sourceChannel.getNotes());
 
-				//C3App.splash.reset();
-				//C3SplashScreen.setRedirect("game");
-				C3App.setPage("game");
+				C3Game.paused = false;
+				C3Game.playing = false;
+				
+				C3App.splash.reset();
+				C3SplashScreen.setRedirect("game");
+				C3App.setPage("splash");
 			} else if (exit_button.ifOnButton(x, y)) {
 				System.exit(0);
 			} else if (help_button.ifOnButton(x, y)) {
