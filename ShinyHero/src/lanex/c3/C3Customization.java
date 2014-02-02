@@ -106,7 +106,6 @@ public class C3Customization extends ScreenPage {
 				
 				C3Game.testMap = MusicMap.fromPath(songList.getSelectedName());
 				C3Game.musicPlayer = new MusicPlayer();
-				C3Game.musicPlayer.play(C3Game.testMap);
 				C3Game.scrollSheet = new ScrollingMusicSheet(trackList.getSelected());
 				System.out.println("SETTING: " + C3Game.scrollSheet.sourceTrack.getNotes());
 				
