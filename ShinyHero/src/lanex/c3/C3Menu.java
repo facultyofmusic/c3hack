@@ -15,7 +15,6 @@ public class C3Menu extends ScreenPage {
 	public static Music music;
 
 	public C3Menu() {
-		help_button = new Button(C3App.RENDER_WIDTH / 2 - 200, 600, 400, 100, "help_button.png", Color.yellow);
 		exit_button = new Button(C3App.RENDER_WIDTH / 2  + 200, 600, 500, 100, "highscore_button.png", Color.green);
 		start_button = new Button(C3App.RENDER_WIDTH / 2 - 600, 600, 400, 100, "start_button.png", Color.red);
 	}
@@ -41,7 +40,6 @@ public class C3Menu extends ScreenPage {
 
 		g.drawImage(ERM.getImage("menu_back.png"), 0, 0);
 
-		help_button.render(g);
 		exit_button.render(g);
 		start_button.render(g);
 
@@ -64,7 +62,6 @@ public class C3Menu extends ScreenPage {
 
 	@Override
 	public void mouseMoved(int oldx, int oldy, int newx, int newy) {
-		help_button.updateHoverStatus(newx, newy);
 		start_button.updateHoverStatus(newx, newy);
 		exit_button.updateHoverStatus(newx, newy);
 	}
@@ -79,10 +76,7 @@ public class C3Menu extends ScreenPage {
 	public void mousePressed(int button, int x, int y) {
 		// CHECK BUTTONS
 		{
-			if (help_button.ifOnButton(x, y)) {
-				C3App.splash.reset();
-				C3App.setPage("help");
-			} else if (start_button.ifOnButton(x, y)) {
+			if (start_button.ifOnButton(x, y)) {
 				C3App.splash.reset();
 				C3App.setPage("custom");
 			} else if (exit_button.ifOnButton(x, y)) {

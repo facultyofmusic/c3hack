@@ -30,7 +30,7 @@ public class C3Game extends ScreenPage {
 	public static ScrollingMusicSheet scrollSheet;
 	
 	
-	int tickMakeUp = 50;
+	int tickMakeUp = 80;
 	int currentTick;
 
 	public C3Game() {
@@ -121,17 +121,20 @@ public class C3Game extends ScreenPage {
 			for (int x = 0; x < temp.collisionHistory.length; x++) {
 				short brightness = temp.collisionHistory[x];
 
-				g.setColor(new Color(brightness, brightness, brightness));
-				g.fillRect(
-						(int) (C3App.RENDER_WIDTH / 2
-								- (currentTick - temp.getStartTick())
-								* scrollSheet.pixelsPerTick + x * pieceLength),
-								C3App.RENDER_HEIGHT - getDistanceFromBottom(temp.getPitch()),
-						pieceLength + 1, 10);
+				if(brightness != 0){
+					g.setColor(new Color(brightness, brightness, brightness));
+					g.fillRect(
+							(int) (C3App.RENDER_WIDTH / 2
+									- (currentTick - temp.getStartTick())
+									* scrollSheet.pixelsPerTick + x * pieceLength),
+									C3App.RENDER_HEIGHT - getDistanceFromBottom(temp.getPitch()),
+							pieceLength + 1, 10);
+				}
 
 			}
 
-			g.setColor(Color.lightGray);
+			g.setColor(Color.red);
+			
 			g.drawRect(
 					C3App.RENDER_WIDTH / 2
 							- (currentTick - temp.getStartTick())
@@ -155,6 +158,11 @@ public class C3Game extends ScreenPage {
 		g.drawImage(ERM.getImage("power_bar.png"), 0, 688, 0, 0, 1280, 32, darkFilter);
 		g.setColor(Color.black);
 		g.fillRect(scrollSheet.powerLevel, 688, 1280, 720);
+		
+		// draw pitch highlight
+		g.drawImage(ERM.getImage("pitch_marker.png"), C3App.RENDER_WIDTH/2 - scrollSheet.pixelsPerTick * this.tickMakeUp, C3App.RENDER_HEIGHT
+				- getDistanceFromBottom((int) (currentPitch+4.5f)));
+		//g.fillRect(X_SIZE - x, Y_SIZE + 283 - (pitchHistory[x] * 8), 1, 2);
 
 		update();
 	}
@@ -234,7 +242,7 @@ public class C3Game extends ScreenPage {
 			} else {
 				pitchDifference = 1;
 			}
-			scrollSheet.update(currentTick + 50, pitchDifference);
+			scrollSheet.update(currentTick - tickMakeUp, pitchDifference);
 			
 		}
 	}
@@ -243,6 +251,7 @@ public class C3Game extends ScreenPage {
 		musicPlayer.play(C3Game.testMap);
 		currentTick = 0;
 		playing = true;
+		scrollSheet.powerLevel = 800;
 	}
 
 	@Override

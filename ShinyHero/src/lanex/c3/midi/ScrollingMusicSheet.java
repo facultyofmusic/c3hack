@@ -102,7 +102,7 @@ public class ScrollingMusicSheet {
 		
 		findNewCurrentPitch();
 		
-		if(currentActiveNote != null && currentActiveNote.collisionHistory != null){
+		if(currentActiveNote != null && currentActiveNote.collisionHistory != null && !Float.isNaN(pitchDifference)){
 			
 			if(Math.abs(pitchDifference) % 12 > 0.5){
 				powerLevel -= 1;
