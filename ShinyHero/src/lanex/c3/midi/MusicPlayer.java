@@ -23,7 +23,9 @@ public class MusicPlayer {
 	
 	public void stop() // Stops playing when window is closed or at end of song
 	{
-		sequencer.stop();
+		if (sequencer != null) {
+			sequencer.stop();
+		}
 	}
 	
 	public void play(MusicMap map)

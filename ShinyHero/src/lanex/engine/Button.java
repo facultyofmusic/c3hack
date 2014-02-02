@@ -2,8 +2,11 @@ package lanex.engine;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.TrueTypeFont;
+import java.awt.Font;
 
 public class Button {
+	protected static final TrueTypeFont TEXT_FONT = new TrueTypeFont(new Font("sans-serif", Font.PLAIN, 14), true);
 	
 	protected float x;
 	protected float y;
@@ -30,8 +33,9 @@ public class Button {
 		return false;
 	}
 	
-	public void updateHoverStatus(float mx, float my) {
+	public boolean updateHoverStatus(float mx, float my) {
 		hovered = ifOnButton(mx, my);
+		return hovered;
 	}
 
 	public void render(Graphics g) {
@@ -42,10 +46,16 @@ public class Button {
 				ERM.getImage(img).draw(x, y);
 			}
 		} else {
-			g.setColor(Color.white);
+			//clipping for text overflow
+			g.setClip((int)x, (int)y, (int)width, (int)height);
+			if (hovered) {
+				g.setColor(hoverColor);
+			} else {
+				g.setColor(Color.white);
+			}
 			g.fillRect(x, y, width, height);
-			g.setColor(Color.black);
-			g.drawString(img, x, y);
+			TEXT_FONT.drawString(x + 20, y, img, Color.black);
+			g.clearClip();
 		}
 	}
 }

@@ -24,7 +24,7 @@ public class C3SplashScreen extends ScreenPage{
 	
 	public C3SplashScreen(){
 		try{
-			backgroundImage = new Image("data/splash.png");
+			backgroundImage = new Image("data/c3images/def_background.png");
 			black = new Image("data/black.png");
 			
 			reset();
