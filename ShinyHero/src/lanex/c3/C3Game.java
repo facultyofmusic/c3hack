@@ -10,6 +10,7 @@ import java.util.Iterator;
 import lanex.c3.midi.MusicMap;
 import lanex.c3.midi.MusicPlayer;
 import lanex.c3.midi.Note;
+import lanex.c3.midi.ScrollingMusicSheet;
 import lanex.engine.Button;
 import lanex.engine.ScreenPage;
 
@@ -24,7 +25,7 @@ import ui.AudioInputProcessor;
 public class C3Game extends ScreenPage {
 	private Button menu_button, start_button;
 
-	static float currentPitch;
+	static float currentPitch, pitchDifference;
 	static float[] history,
 			pitchHistory;
 	
@@ -34,10 +35,7 @@ public class C3Game extends ScreenPage {
 	public static MusicPlayer musicPlayer;
 	public static ScrollingMusicSheet scrollSheet;
 	
-	long startTime, deltaTime;
 	int currentTick;
-	float pixelsPerTick = 2;
-	
 
 	public C3Game() {
 		menu_button = new Button(C3App.RENDER_WIDTH / 2 + 400, 600, 500, 100,
@@ -71,7 +69,10 @@ public class C3Game extends ScreenPage {
 						AudioInputProcessor.frequency).toString(), 20, 40);
 		g.drawString((new StringBuilder("Pitch No.: ")).append(currentPitch)
 				.toString(), 20, 60);
-		g.drawString("Milliseconds Delta: " + deltaTime, 20, 80);
+		
+		if(scrollSheet.currentActiveNote != null)
+			g.drawString("accuracy: " + pitchDifference, 20, 80);
+		
 		g.drawString("Current Tick: " + currentTick, 20, 100);
 		g.drawString("Current Note: " + scrollSheet.currentActiveNote, 20, 120);
 		g.drawString("Active Note Count: " + scrollSheet.activeNotes.size(), 20, 140);
@@ -104,13 +105,31 @@ public class C3Game extends ScreenPage {
 		start_button.render(g);
 		//
 		
+		g.setLineWidth(0.5f);
+		
 		Iterator<Note> activeListIterator = scrollSheet.activeNotes.iterator();
 		
 		while(activeListIterator.hasNext()){
 			Note temp = activeListIterator.next();
 			
+			float pieceLength = (1.0f*(temp.getStopTick() - temp.getStartTick()) * scrollSheet.pixelsPerTick)/temp.collisionHistory.length;
+			
+			for(int x = 0; x < temp.collisionHistory.length; x++){
+				short brightness = temp.collisionHistory[x];
+				
+				g.setColor(new Color(brightness, brightness, brightness));
+				g.fillRect(
+						(int)(C3App.RENDER_WIDTH / 2 - (currentTick-temp.getStartTick()) * scrollSheet.pixelsPerTick + x*pieceLength),
+						C3App.RENDER_HEIGHT + 279 - (temp.getPitch() * 8), 
+						pieceLength + 1, 
+						10
+					);
+				
+			}
+			
+			g.setColor(Color.gray);
 			g.drawRect(C3App.RENDER_WIDTH / 2 - (currentTick-temp.getStartTick()) * scrollSheet.pixelsPerTick, C3App.RENDER_HEIGHT + 279
-					- (temp.getPitch() * 8), (temp.getStopTick() - temp.getStartTick()) * scrollSheet.pixelsPerTick, 10);
+				- (temp.getPitch() * 8), (temp.getStopTick() - temp.getStartTick()) * scrollSheet.pixelsPerTick, 10);
 			
 		}
 
@@ -120,15 +139,18 @@ public class C3Game extends ScreenPage {
 	public void update() {
 		
 		if(playing){
-			deltaTime = System.currentTimeMillis() - startTime;
-			currentTick = (int) (deltaTime / testMap.getMillisPerTick());
-
+			currentTick = (int) this.musicPlayer.getSequencer().getTickPosition();
 
 			currentPitch = (float) (69D + (12D * Math
 					.log((float) AudioInputProcessor.frequency / 440D))
 					/ Math.log(2D));
 			
-			scrollSheet.update(currentTick);
+			if(scrollSheet.currentActiveNote != null){
+				pitchDifference = scrollSheet.currentActiveNote.getPitch() - currentPitch;
+			}else{
+				pitchDifference = 1;
+			}
+			scrollSheet.update(currentTick, pitchDifference);
 		
 			
 			for (int x = C3App.RENDER_WIDTH - 1; x > 0; x--) {
@@ -147,7 +169,6 @@ public class C3Game extends ScreenPage {
 		pitchHistory = new float[C3App.RENDER_WIDTH];
 		
 		musicPlayer.play(C3Game.testMap);
-		startTime = System.currentTimeMillis();
 		//currentTick = -scrollSheet.getOffscreenTickDelta();
 		currentTick = 0;
 		

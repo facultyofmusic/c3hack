@@ -3,6 +3,8 @@ package lanex.c3.midi;
 public class Note implements Comparable<Note> {
 	private static final String[] NOTE_NAMES = {"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"};
 	
+	public short[] collisionHistory;
+	
 	private long startTick;
 	private long stopTick;
 	private int pitch;

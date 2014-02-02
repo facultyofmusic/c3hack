@@ -7,6 +7,7 @@ import java.util.List;
 import lanex.c3.midi.Channel;
 import lanex.c3.midi.MusicMap;
 import lanex.c3.midi.MusicPlayer;
+import lanex.c3.midi.ScrollingMusicSheet;
 import lanex.c3.midi.Track;
 import lanex.engine.Button;
 import lanex.engine.ButtonList;

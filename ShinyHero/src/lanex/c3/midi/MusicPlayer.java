@@ -16,6 +16,11 @@ public class MusicPlayer {
 		return sequencer.isRunning();
 	}
 	
+	public Sequencer getSequencer()
+	{
+		return sequencer;
+	}
+	
 	public void stop() // Stops playing when window is closed or at end of song
 	{
 		sequencer.stop();
