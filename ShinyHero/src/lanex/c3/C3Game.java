@@ -83,6 +83,8 @@ public class C3Game extends ScreenPage {
 		g.drawString("Offscreen Delta: " + scrollSheet.getOffscreenTickDelta(),
 				20, 160);
 
+		drawStaff(g);
+		
 		if (history != null) {
 
 			// draw history
@@ -143,13 +145,75 @@ public class C3Game extends ScreenPage {
 					C3App.RENDER_WIDTH / 2
 							- (currentTick - temp.getStartTick())
 							* scrollSheet.pixelsPerTick, C3App.RENDER_HEIGHT
-							+ 279 - (temp.getPitch() * 8),
+							- getDistanceFromBottom(temp.getPitch()),
 					(temp.getStopTick() - temp.getStartTick())
 							* scrollSheet.pixelsPerTick, 10);
+			
+			//draw sharp symbol
+			int semiTones = temp.getPitch() % 12;
+			if (semiTones == 1 || semiTones == 3 || semiTones == 6 || semiTones == 8 || semiTones == 10) {
+				g.drawString("#", C3App.RENDER_WIDTH / 2
+							- (currentTick - temp.getStartTick())
+							* scrollSheet.pixelsPerTick - 20, C3App.RENDER_HEIGHT
+							- getDistanceFromBottom(temp.getPitch()));
+			}
 
 		}
 
 		update();
+	}
+	
+	private void drawStaff(Graphics g) {
+		g.setColor(Color.white);
+		g.setLineWidth(2);
+		for (int i = 0; i < 5; i++) {
+			g.drawLine(0, C3App.RENDER_HEIGHT - 240 - 16 * i, 
+					C3App.RENDER_WIDTH, C3App.RENDER_HEIGHT - 240 - 16 * i);
+		}
+	}
+	
+	private int getDistanceFromBottom(int pitch) {
+		final int GAP_HEIGHT = 8;
+		int octaveHeight = 7 * GAP_HEIGHT;
+		int leftoverPitch = pitch % 12;
+		int semitoneOffset;
+		switch (leftoverPitch) {
+		//C,C#
+		case 0:
+		case 1:
+			semitoneOffset = 0;
+			break;
+		//D,D#
+		case 2:
+		case 3:
+			semitoneOffset = GAP_HEIGHT;
+			break;
+		//E
+		case 4:
+			semitoneOffset = 2 * GAP_HEIGHT;
+			break;
+		//F, F#
+		case 5:
+			semitoneOffset = 3 * GAP_HEIGHT;
+			break;
+		//G,G#
+		case 7:
+		case 8:
+			semitoneOffset = 4 * GAP_HEIGHT;
+			break;
+		//A,A#
+		case 9:
+		case 10:
+			semitoneOffset = 5 * GAP_HEIGHT;
+			break;
+		//B
+		default:
+			semitoneOffset = 6 * GAP_HEIGHT;
+			break;
+		}
+		int result = octaveHeight * (pitch / 12) + semitoneOffset;
+		
+		return result;
 	}
 
 	public void update() {
