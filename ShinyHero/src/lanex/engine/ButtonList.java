@@ -46,11 +46,18 @@ public class ButtonList<T> {
 			}
 		}
 	}
+	
+	public void updateButtonHoverStatuses(float mx, float my) {
+		for (int i = 0; i < numMembers; i++) {
+			//assumes only 1 button can be hovered on at the same time
+			buttons.get(i).updateHoverStatus(mx, my);
+		}
+	}
 
 	public void addMember(T member, String memberName) {
 		members.add(member);
 		buttons.add(new Button(startX, startY + numMembers * 22, width, 20,
-				memberName, null));
+				memberName, Color.lightGray));
 		numMembers++;
 	}
 

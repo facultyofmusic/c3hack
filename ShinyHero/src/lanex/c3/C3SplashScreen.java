@@ -24,7 +24,7 @@ public class C3SplashScreen extends ScreenPage{
 	
 	public C3SplashScreen(){
 		try{
-			backgroundImage = new Image("data/splash.png");
+			backgroundImage = new Image("data/c3images/def_background.png");
 			black = new Image("data/black.png");
 			
 			reset();
@@ -47,9 +47,10 @@ public class C3SplashScreen extends ScreenPage{
 		if (backgroundImage.getAlpha() < 1.0){
 			backgroundImage.setAlpha(backgroundImage.getAlpha() + fadeTime);
 		}else{			
+			//hacky way to double rotation speed
 			C3LoadingIndicator.draw(g);
-
 			C3LoadingIndicator.draw(g);
+			
 			if (ERM.isDoneLoading()) {
 				black.setAlpha(black.getAlpha() + fadeTime);
 

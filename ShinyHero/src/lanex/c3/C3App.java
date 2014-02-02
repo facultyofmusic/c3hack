@@ -2,6 +2,8 @@ package lanex.c3;
 
 import java.util.HashMap;
 
+import lanex.c3.midi.MusicMap;
+import lanex.c3.midi.MusicPlayer;
 import lanex.engine.ScreenPage;
 
 import org.newdawn.slick.AppGameContainer;
@@ -44,6 +46,11 @@ public class C3App extends BasicGame implements ComponentListener {
 		
 		THC = C3InternalConsole.getInstance(con, this);
 		THC.append("initializing pages...");
+		
+		//init sound things (makes first play of the song much quicker)
+		C3Game.musicPlayer = new MusicPlayer();
+		C3Game.musicPlayer.play(MusicMap.fromPath("mid/test_th.mid"));
+		C3Game.musicPlayer.stop();
 
 		C3SplashScreen.setRedirect("main_menu");
 		

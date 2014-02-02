@@ -32,7 +32,7 @@ public class C3Customization extends ScreenPage {
 		start_button = new Button(C3App.RENDER_WIDTH / 2 - 225, 520, 450, 150,
 				"btn_start.png", Color.green);
 		exit_button = new Button(C3App.RENDER_WIDTH - 309, 585, 256, 85,
-				"btn_mainmenu.png", Color.red);
+				"btn_exit.png", Color.red);
 		help_button = new Button(53, 585, 256, 85, "btn_help.png", Color.yellow);
 
 		File mid = new File("mid/");
@@ -41,10 +41,10 @@ public class C3Customization extends ScreenPage {
 				return name.endsWith(".mid");
 			}
 		});
-		songList = new ButtonList<>(10, 10, C3App.RENDER_WIDTH / 2 - 150);
+		songList = new ButtonList<>(50, 50, C3App.RENDER_WIDTH / 2 - 200);
 		for (File f : mids) {
 			List<Track> temp = MusicMap.fromPath(f.getPath()).getTrackList();
-			channelList = new ButtonList<>(C3App.RENDER_WIDTH / 2 - 130, 10,
+			channelList = new ButtonList<>(C3App.RENDER_WIDTH / 2 - 130, 50,
 					250); // Temporary to save
 							// declaration space. Is
 							// nulled later.
@@ -95,9 +95,19 @@ public class C3Customization extends ScreenPage {
 	@Override
 	public void mouseMoved(int oldx, int oldy, int newx, int newy) {
 		help_button.updateHoverStatus(newx, newy);
-		start_button.updateHoverStatus(newx, newy);
 		exit_button.updateHoverStatus(newx, newy);
 
+
+		if (channelList != null) {
+			//only update the start hover if the channel is selected
+			if (channelList.getSelected() != null) {
+				start_button.updateHoverStatus(newx, newy);
+			}
+			channelList.updateButtonHoverStatuses(newx, newy);
+		}
+		if (songList != null) {
+			songList.updateButtonHoverStatuses(newx, newy);
+		}
 	}
 
 	@Override

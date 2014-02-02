@@ -9,6 +9,10 @@ public class MusicPlayer {
 	
 	private Sequencer sequencer;
 	
+	public MusicPlayer() {
+		sequencer = null;
+	}
+	
 	public boolean isPlaying()
 	{
 		if (sequencer == null)
@@ -23,7 +27,9 @@ public class MusicPlayer {
 	
 	public void stop() // Stops playing when window is closed or at end of song
 	{
-		sequencer.stop();
+		if (sequencer != null) {
+			sequencer.stop();
+		}
 	}
 	
 	public void resume()
@@ -55,11 +61,6 @@ public class MusicPlayer {
 		{
 			e.printStackTrace();
 		}
-	}
-	
-	public MusicPlayer ()
-	{
-		sequencer = null;
 	}
 	
 	private static MidiDevice getReceivingDevice()

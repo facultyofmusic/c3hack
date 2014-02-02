@@ -4,20 +4,18 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
 public class C3LoadingIndicator {
-	private static Image snow, english, japanese;
-	private static boolean jP, eP, sP;
+	private static Image snow, english;
+	private static boolean eP, sP;
 
 	public static void reset() {
 		try {
 			if (snow == null) {
 				Image loading = new Image("data/images/loading.png");
-				japanese = loading.getSubImage(0, 0, 128, 32);
-				english = loading.getSubImage(0, 32, 128, 32);
-				snow = loading.getSubImage(0, 64, 32, 32).getScaledCopy(2.5f);
+				english = loading.getSubImage(0, 0, 128, 32);
+				snow = loading.getSubImage(0, 32, 80, 80);
 			}
 
 			snow.setAlpha(0);
-			japanese.setAlpha(0);
 			english.setAlpha(0);
 		} catch (SlickException ex) {
 			ex.printStackTrace();
@@ -37,19 +35,6 @@ public class C3LoadingIndicator {
 			snow.setAlpha(snow.getAlpha() + 0.014f);
 		} else {
 			snow.setAlpha(snow.getAlpha() - 0.014f);
-		}
-
-		g.drawImage(japanese, 1050, 630);
-		if (japanese.getAlpha() >= 1) {
-			jP = false;
-		} else if (japanese.getAlpha() <= 0.3f) {
-			jP = true;
-		}
-
-		if (jP) {
-			japanese.setAlpha(japanese.getAlpha() + 0.018f);
-		} else {
-			japanese.setAlpha(japanese.getAlpha() - 0.018f);
 		}
 
 		g.drawImage(english, 1080, 650);
