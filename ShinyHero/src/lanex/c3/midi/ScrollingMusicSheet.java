@@ -86,7 +86,7 @@ public class ScrollingMusicSheet {
 		
 		if(currentActiveNote != null && currentActiveNote.collisionHistory != null){
 			
-			if(Math.abs(pitchDifference) > 0.5){
+			if(Math.abs(pitchDifference) % 12 > 0.5){
 				return;
 			}
 			
