@@ -24,7 +24,7 @@ public class C3Customization extends ScreenPage {
 	protected static final TrueTypeFont TEXT_FONT = new TrueTypeFont(new Font("sans-serif", Font.BOLD, 20), true);
 
 	
-	private Button start_button, exit_button, help_button,
+	private Button start_button, exit_button, 
 			increase_speed_button, decrease_speed_button;
 
 	private ButtonList<ButtonList<Channel>> songList;
@@ -40,7 +40,6 @@ public class C3Customization extends ScreenPage {
 				"btn_start.png", Color.green);
 		exit_button = new Button(C3App.RENDER_WIDTH - 309, 585, 256, 85,
 				"btn_exit.png", Color.red);
-		help_button = new Button(53, 585, 256, 85, "btn_help.png", Color.yellow);
 		increase_speed_button = new Button(C3App.RENDER_WIDTH - 150, 50, 100,
 				100, "btn_plus.png", Color.cyan);
 		decrease_speed_button = new Button(C3App.RENDER_WIDTH - 350, 50,
@@ -84,7 +83,6 @@ public class C3Customization extends ScreenPage {
 			channelList.render(g);
 		start_button.render(g);
 		exit_button.render(g);
-		help_button.render(g);
 		increase_speed_button.render(g);
 		decrease_speed_button.render(g);
 
@@ -111,7 +109,6 @@ public class C3Customization extends ScreenPage {
 
 	@Override
 	public void mouseMoved(int oldx, int oldy, int newx, int newy) {
-		help_button.updateHoverStatus(newx, newy);
 		exit_button.updateHoverStatus(newx, newy);
 		increase_speed_button.updateHoverStatus(newx, newy);
 		decrease_speed_button.updateHoverStatus(newx, newy);
@@ -176,8 +173,6 @@ public class C3Customization extends ScreenPage {
 				C3App.setPage("splash");
 			} else if (exit_button.ifOnButton(x, y)) {
 				System.exit(0);
-			} else if (help_button.ifOnButton(x, y)) {
-				C3App.setPage("help");
 			}
 		}
 

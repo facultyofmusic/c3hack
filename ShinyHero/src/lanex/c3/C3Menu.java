@@ -11,7 +11,7 @@ import org.newdawn.slick.Music;
 
 public class C3Menu extends ScreenPage {
 
-	private Button start_button, help_button, exit_button;
+	private Button start_button, exit_button;
 	public static Music music;
 
 	public C3Menu() {
